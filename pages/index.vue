@@ -5,13 +5,12 @@
     <p>
         data {{ data }}
     </p>
+    <p>{{ name }}</p>
 </template>
 
 <script setup>
-// definePageMeta({ middleware: 'auth' })
-// file: e.g ~/pages/login.vue
 const { status, data, signIn, signOut } = useAuth()
-
+const { data: name } = await useLazyFetch('/api/user')
 // status.value // Session status: `unauthenticated`, `loading`, `authenticated`
 // data.value // Session data, e.g., expiration, user.email, ...
 
