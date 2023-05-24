@@ -1,7 +1,6 @@
 <template>
-    <p>{{ name }}</p>
+    <p>Index</p>
 </template>
 
 <script setup>
-const { data: name } = await useLazyFetch('/api/user')
 </script>
