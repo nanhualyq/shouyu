@@ -7,4 +7,5 @@ node_modules
 .env
 dist
 .DS_Store
-db/sqlite/data.db*
+db/data.db*
+db/version
