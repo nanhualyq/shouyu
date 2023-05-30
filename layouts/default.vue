@@ -22,7 +22,7 @@
                 </div>
             </div>
             <!-- Page content here -->
-            <div class="flex-1">
+            <div class="flex-1 p-3">
                 <slot />
             </div>
         </div>
