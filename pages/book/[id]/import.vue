@@ -17,6 +17,7 @@
         </div>
         <div v-if="activeTab === tabName.batch" class="flex-1">
             <form class="flex gap-4 py-2 flex-wrap h-full" @submit.prevent="submitBatch">
+                <!-- TODO: use checkbox instead -->
                 <select class="select select-bordered w-full sm:flex-1 h-48" multiple v-model="formData.lessons">
                     <option disabled selected>选择课程</option>
                     <option value="">全部</option>
@@ -53,7 +54,11 @@ const formData = ref({
     skills: ['']
 })
 function submitBatch() {
-    alert(JSON.stringify(formData.value))
+    // alert(JSON.stringify(formData.value))
+    useFetch('/api/card/import', {
+        method: 'post',
+        body: formData
+    })
 }
 </script>
 
