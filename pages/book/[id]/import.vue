@@ -16,19 +16,20 @@
                 @click="activeTab = tabName.specific">指定</a>
         </div>
         <div v-if="activeTab === tabName.batch" class="flex-1">
-            <form class="flex gap-4 py-2 flex-wrap h-full" @submit.prevent="submitBatch">
-                <!-- TODO: use checkbox instead -->
-                <select class="select select-bordered w-full sm:flex-1 h-48" multiple v-model="formData.lessons">
+            <form class="grid sm:grid-rows-[1fr_auto] grid-rows-[1fr_10rem_auto] sm:grid-cols-2 gap-4 py-2 h-full"
+                @submit.prevent="submitBatch">
+                <select class="select select-bordered w-full" multiple v-model="formData.lessons">
                     <option disabled selected>选择课程</option>
                     <option value="">全部</option>
-                    <option v-for="lesson in lessons" :value="lesson">{{ lesson }}</option>
+                    <option v-for="lesson in lessons" :value="lesson.lesson" class="text-ellipsis overflow-hidden">{{
+                        lesson.lesson }} {{ lesson.en }}</option>
                 </select>
-                <select class="select select-bordered w-full sm:flex-1" multiple v-model="formData.skills">
+                <select class="select select-bordered w-full" multiple v-model="formData.skills">
                     <option disabled selected>选择技能</option>
                     <option value="">全部</option>
                     <option v-for="skill in skills" :value="skill">{{ skill }}</option>
                 </select>
-                <button type="submit" class="btn btn-block btn-primary">导入</button>
+                <button type="submit" class="btn btn-block btn-primary sm:col-span-2">导入</button>
             </form>
         </div>
         <div v-if="activeTab === tabName.specific">
@@ -53,12 +54,20 @@ const formData = ref({
     lessons: [''],
     skills: ['']
 })
-function submitBatch() {
-    // alert(JSON.stringify(formData.value))
-    useFetch('/api/card/import', {
+async function submitBatch() {
+    const data = {
+        book_id: book?.value?.id
+    }
+    for (const key of ['lessons', 'skills']) {
+        if (formData.value[key][0] !== '') {
+            data[key] = formData.value[key]
+        }
+    }
+    const {data: count} = await useFetch('/api/card/import', {
         method: 'post',
-        body: formData
+        body: data
     })
+    alert(`${count.value} 张卡片成功导入`)
 }
 </script>
 

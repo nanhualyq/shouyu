@@ -1,14 +1,11 @@
 version: '3'
 services:
-  base:
+  dev:
     image: node:lts
     working_dir: /app
     user: node
     volumes:
       - .:/app
-  dev:
-    extends:
-      service: base
     ports:
       - 3000:3000
       - 24678:24678
