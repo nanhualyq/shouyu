@@ -74,6 +74,7 @@
 </template>
 
 <script setup>
+const toastData = useToast()
 const { params: { id } } = useRoute()
 const tabName = {
     batch: Symbol(),
@@ -108,7 +109,7 @@ async function submitBatch(params) {
     if (error.value) {
         alert(error.value.data.message);
     } else {
-        alert(`${count.value?.changes} 张卡片成功导入，涉及总数${count.value?.total}`)
+        addToast(`成功：${count.value?.changes}，跳过：${count.value?.total - count.value?.changes}`)
     }
 }
 let sentences = ref([])
@@ -127,6 +128,6 @@ function importSentence(e, row) {
         position: [row.position],
         skills: [e.target.value]
     })
-    e.target.value = '选择技能'
+    e.target.value = e.target.options[0].value 
 }
 </script>
