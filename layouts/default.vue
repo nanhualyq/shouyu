@@ -1,7 +1,7 @@
 <template>
-    <div class="drawer">
+    <div class="drawer h-screen">
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content flex flex-col">
+        <div class="drawer-content flex flex-col h-full">
             <!-- Navbar -->
             <div class="w-full navbar bg-base-300">
                 <div class="flex-none lg:hidden">
@@ -28,7 +28,7 @@
         </div>
         <div class="drawer-side">
             <label for="my-drawer-3" class="drawer-overlay"></label>
-            <ul class="menu p-4 w-80 bg-base-100">
+            <ul class="menu p-4 w-80 h-full bg-base-100 text-base-content">
                 <!-- Sidebar content here -->
                 <NavbarMenu />
             </ul>
