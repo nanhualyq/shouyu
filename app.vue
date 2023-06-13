@@ -3,5 +3,6 @@
     <NuxtLoadingIndicator /> <!-- here -->
     <NuxtPage />
   </NuxtLayout>
-  <Toast />
+  <TheToast />
+  <TheErrorDialog />
 </template>

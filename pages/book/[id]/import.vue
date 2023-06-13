@@ -107,7 +107,7 @@ async function submitBatch(params) {
     })
     submitting.value = pending.value
     if (error.value) {
-        alert(error.value.data.message);
+        useErrorDialog(error)
     } else {
         addToast(`成功：${count.value?.changes}，跳过：${count.value?.total - count.value?.changes}`)
     }
