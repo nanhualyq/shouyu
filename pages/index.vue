@@ -6,7 +6,7 @@
                 <h2 class="card-title">{{book.name}}</h2>
                 <!-- <p>Click the button to watch on Jetflix app.</p> -->
                 <div class="card-actions justify-end">
-                    <button class="btn btn-primary">学习新卡</button>
+                    <NuxtLink class="btn btn-primary" :to="`/book/${book.id}/plan`">学习新卡</NuxtLink>
                 </div>
             </div>
         </div>
