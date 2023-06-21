@@ -74,7 +74,6 @@
 </template>
 
 <script setup>
-const toastData = useToast()
 const { params: { id } } = useRoute()
 const tabName = {
     batch: Symbol(),

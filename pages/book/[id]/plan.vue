@@ -16,7 +16,7 @@
                     <label class="label cursor-pointer">
                         <span class="label-text mr-2">{{ row.label }}</span>
                         <input type="checkbox" checked="checked" class="checkbox checkbox-lg" :value="row.value"
-                            v-model="formData.skill" />
+                            v-model="formData.skills" />
                     </label>
                 </div>
                 <div class="divider"></div>
@@ -27,7 +27,7 @@
                     </label>
                 </div>
                 <div class="divider"></div>
-                <button type="submit" class="btn btn-primary btn-block" :disabled="!formData.skill[0]">开始学习</button>
+                <button type="submit" class="btn btn-primary btn-block" :disabled="!formData.skills[0]">开始学习</button>
             </form>
         </ClientOnly>
     </div>
@@ -35,18 +35,13 @@
 
 <script setup>
 const { params: { id } } = useRoute()
-const { data: book } = useFetch('/api/book/' + id)
-const { data, pending } = useFetch('/api/card/new_stats', {
+const { data: book } = await useFetch('/api/book/' + id)
+const { data, pending } = await useFetch('/api/card/new_stats', {
     query: {
         book_id: book.value?.id
     }
 })
-const skillCn = {
-    read: '阅读',
-    write: '写作',
-    listen: '听力',
-    speak: '口语',
-}
+const skillCn = useSkillCn()
 const skillOrder = {
     read: 0,
     write: 1,
@@ -54,27 +49,32 @@ const skillOrder = {
     speak: 3
 }
 const skillOptions = computed(() => {
-    return (data?.value || [])
+    return (data.value || [])
         ?.filter(({ count }) => count > 0)
         ?.map(({ skill, count }) => ({ label: `${skillCn[skill]} (${count})`, value: skill }))
         ?.sort((a, b) => skillOrder[a.value] - skillOrder[b.value])
 })
+const formData = ref({
+    skills: [],
+    random: true
+})
 watch(skillOptions, () => {
     const val = skillOptions?.value?.[0]?.value
     if (val) {
-        formData.value.skill[0] = val
+        formData.value.skills[0] = val
     }
-})
-const formData = ref({
-    skill: [],
-    random: true
+}, {
+    immediate: true
 })
 function gotoPlay() {
-    const {skill, random} = formData.value
-    useRouter().push({ path: '/card/play', query: {
+    const { skills, random } = formData.value
+    const query = {
         book_id: id,
-        random,
-        skill: skill.join(',')
-    } })
+        skills: skills.join(',')
+    }
+    if (random) {
+        query.random = 1
+    }
+    useRouter().push({ path: '/card/play', query })
 }
 </script>

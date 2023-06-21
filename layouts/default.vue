@@ -22,7 +22,7 @@
                 </div>
             </div>
             <!-- Page content here -->
-            <div class="flex-1 p-3">
+            <div class="flex-1" :class="{'p-3': shouldPadding}">
                 <slot />
             </div>
         </div>
@@ -35,3 +35,9 @@
         </div>
     </div>
 </template>
+<script setup>
+const shouldPadding = computed(() => {
+    const {name} = useRoute()
+    return name !== 'card-play'
+})
+</script>

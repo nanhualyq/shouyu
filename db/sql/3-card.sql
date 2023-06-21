@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS card (
     create_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     due_time TEXT,
-    skilled TEXT,
+    skilled INTEGER,
 	PRIMARY KEY("id"),
     unique(sentence_id, skill, cloze) ON CONFLICT IGNORE
 );
