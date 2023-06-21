@@ -11,9 +11,10 @@ export default defineEventHandler(async event => {
     const temFile = '/tmp/' + Date.now() + '.mp3'
     await new Promise((resolve, reject) => {
         ffmpeg(url)
-            .seekInput(String(media_start))
-            .duration(Number(media_end) - Number(media_start))
-            // .pipe(outStream, { end: true })
+            .inputOptions([
+                `-ss ${media_start}`,
+                `-to ${media_end}`
+            ])
             .output(temFile)
             .on('end', resolve)
             .on('error', reject)
