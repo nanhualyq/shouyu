@@ -12,5 +12,6 @@ export default defineNuxtConfig({
         sqliteFile: 'db/data.db',
         // user1:pass\nuser2:pass
         basicAuth: '',
+        mediaPath: 'media'
     }
 })

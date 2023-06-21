@@ -6,7 +6,8 @@ ffmpeg.setFfmpegPath(path)
 
 export default defineEventHandler(async event => {
     const { media_url, media_start, media_end } = getQuery(event)
-    const url = '/app/media' + media_url
+    const {mediaPath} = useRuntimeConfig()
+    const url = mediaPath + media_url
     const temFile = '/tmp/' + Date.now() + '.mp3'
     await new Promise((resolve, reject) => {
         ffmpeg(url)
