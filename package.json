@@ -9,11 +9,14 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@nuxtjs/tailwindcss": "^6.7.0",
     "@types/better-sqlite3": "^7.6.4",
+    "@types/fluent-ffmpeg": "^2.1.21",
     "@types/node": "^18",
     "better-sqlite3": "^8.4.0",
     "daisyui": "^3.1.0",
+    "fluent-ffmpeg": "^2.1.2",
     "nuxt": "^3.4.0"
   }
 }

@@ -8,9 +8,10 @@
                 label="查看上一句" :field="frontField" />
 
             <p class="current-sentence">
-                <audio src="" v-if="currentSkill === 'listen'" controls></audio>
+                <audio :src="mediaUrl" v-if="currentSkill === 'listen'" controls autoplay></audio>
                 <span v-else class="inline-flex items-center">
-                    <img v-show="currentSkill === 'speak'" src="https://www.svgrepo.com/show/316142/microphone.svg" class="w-8 h-8">
+                    <img v-show="currentSkill === 'speak'" src="https://www.svgrepo.com/show/316142/microphone.svg"
+                        class="w-8 h-8">
                     {{ current?.sentence?.[frontField] }}
                 </span>
             </p>
@@ -32,7 +33,7 @@
         <div class="flex-1 text-primary p-2" v-if="isFlip">
             <audio src="" v-if="currentSkill === 'speak'" controls></audio>
             <span v-else>
-                {{ current?.sentence?.[currentSkill === 'write' ? 'text_forigen' : 'text_local'] }}
+                {{ current?.sentence?.[currentSkill === 'read' ? 'text_local' : 'text_forigen'] }}
             </span>
         </div>
         <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center">
@@ -76,6 +77,11 @@ function submitCard(index) {
 }
 const currentSkill = computed(() => current?.value?.card?.skill)
 const frontField = computed(() => currentSkill.value === 'write' ? 'text_local' : 'text_forigen')
+const mediaUrl = computed(() => {
+    const { media_url, media_start, media_end } = current?.value?.sentence || {}
+    const search = new URLSearchParams({ media_url, media_start, media_end })
+    return '/api/media?' + search.toString()
+})
 const times = computed(() => {
     const last = current?.value?.card?.skilled || 0
     const arr = [
