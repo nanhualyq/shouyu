@@ -8,7 +8,7 @@
                 label="查看上一句" :field="frontField" />
 
             <p class="current-sentence">
-                <audio :src="mediaUrl" v-if="currentSkill === 'listen'" controls autoplay></audio>
+                <TheMedia v-if="currentSkill === 'listen'" :sentence="current?.sentence" />
                 <span v-else class="inline-flex items-center">
                     <img v-show="currentSkill === 'speak'" src="https://www.svgrepo.com/show/316142/microphone.svg"
                         class="w-8 h-8">
@@ -31,7 +31,7 @@
         </div>
         <!-- back -->
         <div class="flex-1 text-primary p-2" v-if="isFlip">
-            <audio src="" v-if="currentSkill === 'speak'" controls></audio>
+            <TheMedia v-if="currentSkill === 'speak'" :sentence="current?.sentence" />
             <span v-else>
                 {{ current?.sentence?.[currentSkill === 'read' ? 'text_local' : 'text_forigen'] }}
             </span>
@@ -77,11 +77,6 @@ function submitCard(index) {
 }
 const currentSkill = computed(() => current?.value?.card?.skill)
 const frontField = computed(() => currentSkill.value === 'write' ? 'text_local' : 'text_forigen')
-const mediaUrl = computed(() => {
-    const { media_url, media_start, media_end } = current?.value?.sentence || {}
-    const search = new URLSearchParams({ media_url, media_start, media_end })
-    return '/api/media?' + search.toString()
-})
 const times = computed(() => {
     const last = current?.value?.card?.skilled || 0
     const arr = [
