@@ -1,5 +1,9 @@
 <template>
     <TheLoading class="full" v-if="pending" />
+    <div v-else-if="!current?.card?.id" class="text-center">
+        没有内容了
+        <NuxtLink class="btn btn-primary" to="/">返回</NuxtLink>
+    </div>
     <div v-else class="h-full flex flex-col">
         <!-- front -->
         <div class="flex-1 p-2">

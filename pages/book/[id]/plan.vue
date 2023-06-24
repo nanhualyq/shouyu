@@ -70,7 +70,8 @@ function gotoPlay() {
     const { skills, random } = formData.value
     const query = {
         book_id: id,
-        skills: skills.join(',')
+        skills: skills.join(','),
+        new: 1
     }
     if (random) {
         query.random = 1
