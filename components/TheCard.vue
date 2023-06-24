@@ -70,8 +70,27 @@ if (error.value) {
 const { data: book } = useFetch('/api/book/' + current.value?.sentence?.book_id)
 const skillCn = useSkillCn()
 let isFlip = ref(false)
-function submitCard(index) {
-    // TODO: submit patch
+async function submitCard(index) {
+    const { time } = times.value?.[index]
+    if (!time) {
+        return
+    }
+    const { num, postfix } = parseTime(time)
+    const sqlitePostfix = postfix === 'm' ? 'minutes' : 'days'
+    const { id } = current?.value?.card
+    pending.value = true
+    const { error } = await useFetch(`/api/card/${id}`, {
+        method: 'PATCH',
+        body: {
+            due_time: `+${num} ${sqlitePostfix}`,
+            skilled: postfix === 'm' ? 0 : num
+        }
+    })
+        .finally(() => pending.value = false)
+    if (error.value) {
+        useErrorDialog(error)
+        return
+    }
     fetchNext()
     isFlip.value = false
 }
@@ -104,16 +123,20 @@ function calcFirstTime(day) {
         return '1d'
     }
 }
+function parseTime(str) {
+    const [, num, postfix] = str?.match(/^(\d+)(\w)/) || []
+    return { num, postfix }
+}
 function formatDay(time) {
-    const [, n, postfix] = time?.match(/^(\d+)(\w)/) || []
-    if (postfix === 'm' || n < 30) {
+    const { num, postfix } = parseTime(time)
+    if (postfix === 'm' || num < 30) {
         return time
     }
-    let max = n / 365
+    let max = num / 365
     if (max >= 1) {
         return `${max.toFixed(1)}y`
     }
-    max = n / 30
+    max = num / 30
     if (max >= 1) {
         return `${max.toFixed(1)}mo`
     }
