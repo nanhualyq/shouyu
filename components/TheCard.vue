@@ -24,15 +24,7 @@
                 :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position + 1 }"
                 label="查看下一句" :field="frontField" />
         </div>
-        <div class="divider" v-if="isFlip">
-            <div class="dropdown">
-                <label tabindex="0" class="btn btn-xs">...</label>
-                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><button> 增加填空题 </button></li>
-                    <li><button class="text-error"> 删除卡片 </button></li>
-                </ul>
-            </div>
-        </div>
+        <div class="divider" v-if="isFlip"> </div>
         <!-- back -->
         <div class="flex-1 text-primary p-2" v-if="isFlip">
             <TheMedia v-if="currentSkill === 'speak'" :sentence="current?.sentence" />
@@ -40,12 +32,19 @@
                 {{ current?.sentence?.[currentSkill === 'read' ? 'text_local' : 'text_forigen'] }}
             </span>
         </div>
-        <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center">
+        <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center items-center">
             <p>{{ current?.$?.total }}</p>
             <p>{{ skillCn[currentSkill] }}</p>
             <p>《{{ book?.name }}》
                 第{{ current?.sentence?.lesson }}课
                 第{{ current?.sentence?.position }}句</p>
+            <div class="relative group">
+                <button class="btn btn-link btn-xs link-neutral">其他操作</button>
+                <ul class="group-hover:block absolute right-5 bottom-5 bg-gray-100 border shadow p-2 rounded w-max hidden">
+                    <li><button class="btn btn-link link-neutral">填空</button></li>
+                    <li><button @click="handleDelete" class="btn btn-link link-error">删除</button></li>
+                </ul>
+            </div>
         </div>
         <div class="buttons flex">
             <template v-if="isFlip">
@@ -95,6 +94,9 @@ async function submitCard(index) {
         useErrorDialog(error)
         return
     }
+    doNext()
+}
+function doNext() {
     fetchNext()
     isFlip.value = false
 }
@@ -145,6 +147,22 @@ function formatDay(time) {
         return `${max.toFixed(1)}mo`
     }
 }
+async function handleDelete() {
+    if (!confirm('确认删除？')) {
+        return
+    }
+    pending.value = true
+    const { error } = await useFetch('/api/card/' + current?.value?.card?.id, {
+        method: 'delete'
+    })
+        .finally(() => pending.value = false)
+    if (error.value) {
+        useErrorDialog(error)
+        return
+    }
+    doNext()
+}
+// TODO: 快捷键
 </script>
 
 <style scoped lang="postcss">
