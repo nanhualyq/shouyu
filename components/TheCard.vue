@@ -52,7 +52,7 @@
                     {{ item.label }} <br> {{ formatDay(item.time) }}
                 </button>
             </template>
-            <button v-else @click="isFlip = true" class="btn btn-primary">显示答案</button>
+            <button v-else @click="showAnswer" class="btn btn-primary">显示答案</button>
         </div>
     </div>
 </template>
@@ -74,7 +74,7 @@ const { data: book } = useFetch('/api/book/' + current.value?.sentence?.book_id)
 const skillCn = useSkillCn()
 let isFlip = ref(false)
 async function submitCard(index) {
-    const { time } = times.value?.[index]
+    const { time } = times.value?.[index] || {}
     if (!time) {
         return
     }
@@ -162,7 +162,28 @@ async function handleDelete() {
     }
     doNext()
 }
-// TODO: 快捷键
+function showAnswer() {
+    isFlip.value = true
+}
+onMounted(() => window.addEventListener('keyup', handleKeyup))
+onUnmounted(() => window.removeEventListener('keyup', handleKeyup))
+function handleKeyup(e) {
+    switch (e.code) {
+        case 'Space':
+            showAnswer()
+            break;
+        case 'Delete':
+            handleDelete()
+            break;
+
+        default:
+            const [, num] = e?.code?.match(/(?:Digit|Numpad)(\d)$/) || []
+            if (num) {
+                submitCard(num - 1)
+            }
+            break;
+    }
+}
 </script>
 
 <style scoped lang="postcss">
