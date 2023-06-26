@@ -9,7 +9,7 @@ export default defineNuxtConfig({
         }
     },
     runtimeConfig: {
-        sqliteFile: 'db/data.db',
+        sqliteFile: 'sqlite/data.db',
         // user1:pass\nuser2:pass
         basicAuth: '',
         mediaPath: 'media'
