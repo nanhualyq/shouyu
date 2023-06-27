@@ -10,12 +10,12 @@
             <table class="table table-xs border-collapse border">
                 <thead>
                     <tr>
-                        <th v-for="row in stats" :class="{'text-primary': row === today}">{{ formatDate(row.date) }}</th>
+                        <th class="border" v-for="row in stats" :class="{'text-primary': row === today}">{{ formatDate(row.date) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td v-for="row in stats" :class="{'text-primary': row === today}">{{ row.count }}</td>
+                        <td class="border" v-for="row in stats" :class="{'text-primary': row === today}">{{ row.count }}</td>
                     </tr>
                 </tbody>
             </table>
