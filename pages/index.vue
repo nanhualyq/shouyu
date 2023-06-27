@@ -10,12 +10,12 @@
             <table class="table table-xs border-collapse border">
                 <thead>
                     <tr>
-                        <th v-for="row in stats" :class="{'text-primary': row === today}">{{ row.date }}</th>
+                        <th v-for="row in stats" :class="{'text-primary': row === today}">{{ formatDate(row.date) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th v-for="row in stats" :class="{'text-primary': row === today}">{{ row.count }}</th>
+                        <td v-for="row in stats" :class="{'text-primary': row === today}">{{ row.count }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -38,4 +38,7 @@
 const { data: books } = await useFetch('/api/book/home')
 const { data: stats } = await useFetch('/api/card/due_stats')
 const today = computed(() => stats?.value?.find(o => (new Date()).toISOString().startsWith(o?.date)))
+function formatDate(str) {
+    return str?.replace(/^\d{4}\-/, '')
+}
 </script>
