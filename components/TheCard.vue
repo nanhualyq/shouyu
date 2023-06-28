@@ -74,6 +74,9 @@ const { data: book } = useFetch('/api/book/' + current.value?.sentence?.book_id)
 const skillCn = useSkillCn()
 let isFlip = ref(false)
 async function submitCard(index) {
+    if (!isFlip.value) {
+        return
+    }
     const { time } = times.value?.[index] || {}
     if (!time) {
         return
