@@ -1,6 +1,6 @@
 <template>
     <!-- may be video -->
-    <audio :class="{loading: pending}" :src="mediaUrl" controls autoplay @loadstart="onStart" @canplaythrough="pending = false" @error="onError"></audio>
+    <audio ref="mediaRef" :class="{loading: pending}" :src="mediaUrl" controls autoplay @loadstart="onStart" @canplaythrough="pending = false" @error="onError"></audio>
     <p v-if="error" class="text-error">{{ mediaUrl }} 加载失败!</p>
 </template>
 <script setup>
@@ -22,4 +22,12 @@ function onError() {
     error.value = true
     pending.value = false
 }
+const mediaRef = ref(null)
+function replay() {
+    mediaRef?.value?.play()
+}
+
+defineExpose({
+    replay
+})
 </script>

@@ -12,7 +12,7 @@
                 label="查看上一句" :field="frontField" />
 
             <p class="current-sentence">
-                <TheMedia v-if="currentSkill === 'listen'" :sentence="current?.sentence" />
+                <TheMedia ref="mediaRef" v-if="currentSkill === 'listen'" :sentence="current?.sentence" />
                 <span v-else class="inline-flex items-center">
                     <img v-show="currentSkill === 'speak'" src="https://www.svgrepo.com/show/316142/microphone.svg"
                         class="w-8 h-8">
@@ -27,7 +27,7 @@
         <div class="divider" v-if="isFlip"> </div>
         <!-- back -->
         <div class="flex-1 text-primary p-2" v-if="isFlip">
-            <TheMedia v-if="currentSkill === 'speak'" :sentence="current?.sentence" />
+            <TheMedia ref="mediaRef" v-if="currentSkill === 'speak'" :sentence="current?.sentence" />
             <span v-else>
                 {{ current?.sentence?.[currentSkill === 'read' ? 'text_local' : 'text_forigen'] }}
             </span>
@@ -165,6 +165,10 @@ async function handleDelete() {
 function showAnswer() {
     isFlip.value = true
 }
+const mediaRef = ref(null)
+function replayMedia() {
+    mediaRef?.value?.replay()
+}
 onMounted(() => window.addEventListener('keyup', handleKeyup))
 onUnmounted(() => window.removeEventListener('keyup', handleKeyup))
 function handleKeyup(e) {
@@ -174,6 +178,9 @@ function handleKeyup(e) {
             break;
         case 'Delete':
             handleDelete()
+            break;
+        case 'KeyR':
+            replayMedia()
             break;
 
         default:
