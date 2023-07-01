@@ -9,8 +9,8 @@ export default defineEventHandler(async event => {
         }
         if (query[key]) {
             let sql = ''
-            if (key === 'book_id') {
-                sql = `${key}=${query[key]}`
+            if (['book_id', 'skill'].includes(key)) {
+                sql = `${key}='${query[key]}'`
             } else {
                 sql = `${key} LIKE '%${query[key]}%'`
             }
@@ -22,14 +22,12 @@ export default defineEventHandler(async event => {
         where = `WHERE ${whereArr.join(' AND ')}`
     }
     const data = await db.prepare(`SELECT *, card.id as id FROM card
-    LEFT JOIN sentence ON (card.sentence_id = sentence.id)
-    ${where}
+    LEFT JOIN sentence ON (card.sentence_id = sentence.id) ${where}
     LIMIT ${query.limit || 20}
     OFFSET ${query.offset}`)
         .all()
     const total = await db.prepare(`SELECT count(*) as total FROM card
-    LEFT JOIN sentence ON (card.sentence_id = sentence.id)
-    ${where}`)
+    LEFT JOIN sentence ON (card.sentence_id = sentence.id) ${where}`)
         .pluck()
         .get()
     return {

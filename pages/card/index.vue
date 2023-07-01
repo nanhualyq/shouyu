@@ -4,6 +4,10 @@
             <option value="">全部材料</option>
             <option v-for="book in books" :value="book.id">{{ book.name }}</option>
         </select>
+        <select class="select select-bordered select-primary" v-model="formData.skill">
+            <option value="">全部技能</option>
+            <option v-for="skill in ['read', 'write', 'listen', 'speak']" :value="skill">{{ skillCn[skill] }}</option>
+        </select>
         <label>
             text_forigen
             <input class="input input-bordered input-primary" type="text" v-model.lazy="formData.text_forigen">
@@ -46,6 +50,7 @@
                     <td>{{ card.text_local }}</td>
                     <td>{{ card.update_time }}</td>
                     <td>
+                        <button class="btn btn-info btn-xs" @click="reviewRow(card.id)">预览</button>
                         <button class="btn btn-error btn-xs" @click="deleteRow(card.id)">删除</button>
                     </td>
                 </tr>
@@ -58,14 +63,25 @@
             <button class="join-item btn btn-outline" :disabled="page === maxPage" @click="page++">下一页</button>
         </div>
     </div>
+
+    <dialog id="preview_dialog" class="modal" @close="onPreviewClose">
+        <form method="dialog" class="modal-box">
+            <TheCard :query="cardQuery" is-preview v-if="cardQuery['card.id']" />
+        </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </template>
 
 <script setup>
+const skillCn = useSkillCn()
 const page = ref(1)
 const maxPage = computed(() => Math.ceil((data?.value?.total || 0) / formData?.value?.limit))
 const formData = ref({
     limit: 20,
     book_id: '',
+    skill: '',
     text_forigen: '',
     text_local: '',
     due_time: '',
@@ -101,5 +117,15 @@ async function deleteRow(id) {
     } else {
         refresh()
     }
+}
+const cardQuery = ref({})
+function reviewRow(id) {
+    cardQuery.value = {
+        'card.id': id
+    }
+    document.getElementById('preview_dialog')?.showModal()
+}
+function onPreviewClose() {
+    cardQuery.value = {}
 }
 </script>

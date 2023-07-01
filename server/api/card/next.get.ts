@@ -5,7 +5,7 @@ export default defineEventHandler(async event => {
     let where = []
     let whereStr = ''
     let order = ''
-    for (const key of ['book_id', 'lesson', 'position']) {
+    for (const key of ['book_id', 'lesson', 'position', 'card.id']) {
         if (query[key]) {
             where.push(`${key}=${query[key]}`)
         }

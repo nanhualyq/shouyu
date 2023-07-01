@@ -58,13 +58,14 @@
 </template>
 
 <script setup>
-const { query } = defineProps({
+const { query, isPreview } = defineProps({
     query: {
         type: Object,
         default() {
             return {}
         }
-    }
+    },
+    isPreview: Boolean
 })
 const { data: current, pending, refresh: fetchNext, error } = await useFetch('/api/card/next', { query })
 if (error.value) {
@@ -74,7 +75,7 @@ const { data: book } = useFetch('/api/book/' + current.value?.sentence?.book_id)
 const skillCn = useSkillCn()
 let isFlip = ref(false)
 async function submitCard(index) {
-    if (!isFlip.value) {
+    if (!isFlip.value || isPreview) {
         return
     }
     const { time } = times.value?.[index] || {}
