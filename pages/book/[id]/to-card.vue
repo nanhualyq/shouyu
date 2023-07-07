@@ -3,6 +3,9 @@
         <div class="text-sm breadcrumbs">
             <ul>
                 <li>
+                    <NuxtLink to="/">首页</NuxtLink>
+                </li>
+                <li>
                     <NuxtLink to="/book">材料</NuxtLink>
                 </li>
                 <li>{{ book?.name }}</li>
@@ -22,7 +25,7 @@
                 <option disabled selected>选择课程</option>
                 <option value="">全部</option>
                 <option v-for="lesson in lessons" :value="lesson.lesson" class="text-ellipsis overflow-hidden">
-                    {{ lesson.lesson }} {{ lesson.en }}
+                    {{ lesson.lesson }} {{ lesson.text_forigen }}
                 </option>
             </select>
             <select class="select select-bordered w-full" multiple v-model="formData.skills">
@@ -37,7 +40,7 @@
             <select class="select select-bordered w-full" v-model="formData.specificLesson" @change="refreshSentences">
                 <option disabled selected :value="null">选择课程</option>
                 <option v-for="lesson in lessons" :value="lesson.lesson">
-                    {{ lesson.lesson }} {{ lesson.en }}
+                    {{ lesson.lesson }} {{ lesson.text_forigen }}
                 </option>
             </select>
             <div class="overflow-x-auto w-full" v-show="sentences.length">
