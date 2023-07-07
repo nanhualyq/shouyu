@@ -40,4 +40,7 @@ const shouldPadding = computed(() => {
     const {name} = useRoute()
     return name !== 'card-play'
 })
+onBeforeUpdate(() => {
+    document.getElementById('my-drawer-3').checked = false
+} )
 </script>
