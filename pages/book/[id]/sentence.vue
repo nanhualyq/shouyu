@@ -17,7 +17,7 @@
             {{ lesson.lesson }} {{ lesson.text_forigen }}
         </option>
     </select>
-    <div class="overflow-x-auto" v-show="sentences?.length">
+    <div class="overflow-x-auto" v-show="sentences?.length" :class="{loading: pending}">
         <table class="table">
             <thead>
                 <tr>
@@ -25,8 +25,9 @@
                     <th>position</th>
                     <th>text_forigen</th>
                     <th>text_local</th>
-                    <th>media_url</th>
-                    <!-- TODO batch update -->
+                    <th>media_url
+                        <button class="btn btn-xs" @click="handleBatchUrl">批量</button>
+                    </th>
                     <th>media_start</th>
                     <th>media_end</th>
                 </tr>
@@ -69,7 +70,7 @@ const sentencesQuery = computed(() => ({
     book_id: book?.value?.id,
     lesson: formData?.value?.lesson
 }))
-const { data: sentences, refresh: refreshSentences } = useFetch('/api/sentence', {
+const { data: sentences, refresh: refreshSentences, pending } = useFetch('/api/sentence', {
     query: sentencesQuery,
     watch: false,
     immediate: false
@@ -88,4 +89,13 @@ async function handleSave() {
 onBeforeRouteLeave(() => {
     sentences.value = []
 })
+function handleBatchUrl() {
+    const val = prompt('新的url')
+    if (val === null) {
+        return
+    }
+    for (const row of sentences.value) {
+        row.media_url = val
+    }
+}
 </script>
