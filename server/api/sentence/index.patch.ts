@@ -17,7 +17,12 @@ export default defineEventHandler(async event => {
             if (set) {
                 set += ','
             }
-            set += `${key}='${row[key]}'`
+            let val = row[key]
+            // fix: error when val like "Here's your coat"
+            if (typeof val === 'string') {
+                val = val.replace(/\'/g, "''")
+            }
+            set += `${key}='${val}'`
         }
         if (!set) {
             throw Error(`${row} is empty`)
