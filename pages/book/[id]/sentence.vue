@@ -30,12 +30,16 @@
                     </th>
                     <th>media_start</th>
                     <th>media_end</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)" @blur.capture="handleBlurTr">
                     <!-- <th>{{sentence.id}}</th> -->
                     <td v-for="field in ['position', 'text_forigen', 'text_local', 'media_url', 'media_start', 'media_end']" :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
+                    <td>
+                        <button class="btn btn-xs btn-error" @click="delRow">删除</button>
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
@@ -79,7 +83,8 @@ async function handleSave() {
     const { error } = await fetchWrapper(
         useFetch('/api/sentence', {
             method: 'PATCH',
-            body: sentences.value
+            body: sentences.value,
+            watch: false,
         })
     )
     if (!error.value) {
@@ -123,7 +128,7 @@ function handleFocusBound() {
     timeout = setTimeout(() => handleFocus(...arguments), 100)
 }
 function handleFocus(e) {
-    if (e.target.closest('#focus-td') || e.target.closest('#time-modal')) {
+    if (e?.target?.closest?.('#focus-td') || e?.target?.closest?.('#time-modal')) {
         return
     }
     document.getElementById('focus-td')?.removeAttribute('id')
@@ -143,7 +148,9 @@ function handleBlurTr(e) {
     if (!e.target.tagName === 'TD') {
         return
     }
-    currentSentence.value[focusField.value] = e.target?.textContent
+    if (focusField.value) {
+        currentSentence.value[focusField.value] = e.target?.textContent
+    }
 }
 function handleMediaTime(offset) {
     let val = currentSentence.value[focusField.value]
@@ -167,6 +174,21 @@ function moveFocusLine(e, direction) {
     const sibling = e.target.closest('tr')?.[key]
     if (sibling) {
         sibling?.querySelector(`td[data-field="${focusField.value}"]`)?.focus()
+    }
+}
+async function delRow() {
+    if (!confirm('确认删除？（有卡片关联会删除失败）')) {
+        return
+    }
+    const { error } = await fetchWrapper(
+        useFetch('/api/sentence/' + currentSentence.value.id, {
+            method: 'DELETE',
+            watch: false,
+        })
+    )
+    if (!error.value) {
+        addToast('已保存')
+        refreshSentences()
     }
 }
 </script>
