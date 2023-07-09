@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "sentence" (
 	"media_end"	TEXT,
 	FOREIGN KEY("book_id") REFERENCES "book",
 	PRIMARY KEY("id"),
-	UNIQUE("book_id","lesson","position") ON CONFLICT REPLACE
+	UNIQUE("book_id","lesson","position")
 );
 INSERT INTO "sentence" VALUES (1,1,1,1,'Excuse me!','对不起！','/nce1/1.mp3','2.7','4.623378');
 INSERT INTO "sentence" VALUES (2,1,1,2,'Whose handbag is it?','这是谁的手袋？','/nce1/1.mp3','10.608956','13.300566');

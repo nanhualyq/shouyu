@@ -11,17 +11,24 @@
             <li>管理内容</li>
         </ul>
     </div>
-    <select class="select select-bordered w-full" v-model="formData.lesson" @change="refreshSentences">
-        <option disabled selected :value="null">选择课程</option>
-        <option v-for="lesson in lessons" :value="lesson.lesson">
-            {{ lesson.lesson }} {{ lesson.text_forigen }}
-        </option>
-    </select>
+    <div class="flex gap-2">
+        <button class="btn btn-secondary" @click="addRow">+新增一句</button>
+        <select class="select select-bordered" v-model="formData.lesson" @change="refreshSentences">
+            <option disabled selected :value="null">选择课程</option>
+            <option v-for="lesson in lessons" :value="lesson.lesson">
+                {{ lesson.lesson }} {{ lesson.text_forigen }}
+            </option>
+        </select>
+    </div>
     <div class="overflow-x-auto" v-show="sentences?.length" :class="{ loading: pending }">
-        <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)" @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)" @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')" @keydown.down.exact="moveFocusLine($event, 'down')">
+        <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
+            @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
+            @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
+            @keydown.down.exact="moveFocusLine($event, 'down')">
             <thead>
                 <tr>
                     <!-- <th></th> -->
+                    <th>lesson</th>
                     <th>position</th>
                     <th>text_forigen</th>
                     <th>text_local</th>
@@ -34,9 +41,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)" @blur.capture="handleBlurTr">
+                <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)"
+                    @blur.capture="handleBlurTr">
                     <!-- <th>{{sentence.id}}</th> -->
-                    <td v-for="field in ['position', 'text_forigen', 'text_local', 'media_url', 'media_start', 'media_end']" :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
+                    <td v-for="field in ['lesson', 'position', 'text_forigen', 'text_local', 'media_url', 'media_start', 'media_end']"
+                        :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
                     <td>
                         <button class="btn btn-xs btn-error" @click="delRow">删除</button>
                     </td>
@@ -65,7 +74,7 @@
 <script setup>
 const { params: { id } } = useRoute()
 const { data: book } = useFetch('/api/book/' + id)
-const { data: lessons } = useFetch(`/api/book/${id}/lessons`)
+const { data: lessons, refresh: refreshLessons } = useFetch(`/api/book/${id}/lessons`)
 const formData = ref({
     lesson: null
 })
@@ -188,6 +197,39 @@ async function delRow() {
     )
     if (!error.value) {
         addToast('已保存')
+        refreshSentences()
+    }
+}
+async function addRow() {
+    const body = {
+        ...sentencesQuery.value
+    }
+    // 课程是手动输入的话，完成后要自动选中该课程
+    let lessonInputed = false
+    if (body.lesson == null) {
+        const maxLesson = lessons.value?.[lessons.value?.length - 1]?.lesson || 0
+        let val = prompt('没有选择课程，请自行填入', maxLesson + 1)
+        if (val === null) {
+            return
+        }
+        body.lesson = +val
+        lessonInputed = true
+    }
+    body.position = (sentences.value?.[sentences.value?.length - 1]?.position || 0) + 1
+    body.text_forigen = ''
+    body.text_local = ''
+    const { error } = await fetchWrapper(
+        useFetch('/api/sentence/', {
+            method: 'post',
+            body
+        })
+    )
+    if (!error.value) {
+        addToast('添加成功')
+        if (lessonInputed) {
+            await refreshLessons()
+            formData.value.lesson = body.lesson
+        }
         refreshSentences()
     }
 }
