@@ -17,8 +17,8 @@
             {{ lesson.lesson }} {{ lesson.text_forigen }}
         </option>
     </select>
-    <div class="overflow-x-auto" v-show="sentences?.length" :class="{loading: pending}">
-        <table class="table">
+    <div class="overflow-x-auto" v-show="sentences?.length" :class="{ loading: pending }">
+        <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)" @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)" @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')" @keydown.down.exact="moveFocusLine($event, 'down')">
             <thead>
                 <tr>
                     <!-- <th></th> -->
@@ -33,20 +33,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="sentence in sentences">
+                <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)" @blur.capture="handleBlurTr">
                     <!-- <th>{{sentence.id}}</th> -->
-                    <td contenteditable @blur="sentence.position = $event?.target?.textContent">{{ sentence.position }}</td>
-                    <td contenteditable @blur="sentence.text_forigen = $event?.target?.textContent">{{ sentence.text_forigen
-                    }}</td>
-                    <td contenteditable @blur="sentence.text_local = $event?.target?.textContent">{{ sentence.text_local }}
-                    </td>
-                    <td contenteditable @blur="sentence.media_url = $event?.target?.textContent">{{ sentence.media_url }}
-                    </td>
-                    <!-- TODO modal control panel -->
-                    <td contenteditable @blur="sentence.media_start = $event?.target?.textContent">{{ sentence.media_start
-                    }}</td>
-                    <td contenteditable @blur="sentence.media_end = $event?.target?.textContent">{{ sentence.media_end }}
-                    </td>
+                    <td v-for="field in ['position', 'text_forigen', 'text_local', 'media_url', 'media_start', 'media_end']" :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -57,6 +46,16 @@
                 </tr>
             </tfoot>
         </table>
+        <div id="time-modal" class="absolute right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
+            :key="currentSentence?.id" v-if="isMediaField" :style="editorPosition">
+            <TheMedia :sentence="currentSentence" />
+            <div class="btn-group w-full flex gap-1 mt-2">
+                <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
+                <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
+                <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
+                <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
+            </div>
+        </div>
     </div>
 </template>
 <script setup>
@@ -66,6 +65,7 @@ const { data: lessons } = useFetch(`/api/book/${id}/lessons`)
 const formData = ref({
     lesson: null
 })
+let currentSentence = ref({})
 const sentencesQuery = computed(() => ({
     book_id: book?.value?.id,
     lesson: formData?.value?.lesson
@@ -76,7 +76,7 @@ const { data: sentences, refresh: refreshSentences, pending } = useFetch('/api/s
     immediate: false
 })
 async function handleSave() {
-    const {error} = await fetchWrapper(
+    const { error } = await fetchWrapper(
         useFetch('/api/sentence', {
             method: 'PATCH',
             body: sentences.value
@@ -98,4 +98,80 @@ function handleBatchUrl() {
         row.media_url = val
     }
 }
+const focusTd = ref(null)
+const focusField = computed(() => focusTd.value?.dataset?.field)
+const isMediaField = computed(() => ['media_start', 'media_end'].includes(focusField.value))
+const editorPosition = computed(() => {
+    const { bottom } = focusTd.value?.getBoundingClientRect()
+    return {
+        top: bottom + 'px'
+    }
+})
+onMounted(() => {
+    window.addEventListener('focus', handleFocusBound, true)
+    window.addEventListener('click', handleFocusBound, true)
+})
+onUnmounted(() => {
+    window.removeEventListener('focus', handleFocusBound, true)
+    window.removeEventListener('click', handleFocusBound, true)
+})
+let timeout
+function handleFocusBound() {
+    if (timeout) {
+        clearTimeout(timeout)
+    }
+    timeout = setTimeout(() => handleFocus(...arguments), 100)
+}
+function handleFocus(e) {
+    if (e.target.closest('#focus-td') || e.target.closest('#time-modal')) {
+        return
+    }
+    document.getElementById('focus-td')?.removeAttribute('id')
+    focusTd.value = null
+    currentSentence.value = null
+}
+function handleFocusTr(e, sentence) {
+    if (!e.target.tagName === 'TD') {
+        return
+    }
+    document.getElementById('focus-td')?.removeAttribute('id')
+    e.target.id = 'focus-td'
+    focusTd.value = e.target
+    currentSentence.value = sentence
+}
+function handleBlurTr(e) {
+    if (!e.target.tagName === 'TD') {
+        return
+    }
+    currentSentence.value[focusField.value] = e.target?.textContent
+}
+function handleMediaTime(offset) {
+    let val = currentSentence.value[focusField.value]
+    val = Number(val) + offset
+    if (isNaN(val) || val < 0) {
+        val = 0
+    }
+    currentSentence.value[focusField.value] = val.toFixed(2)
+}
+function handleArrow(offset) {
+    if (!isMediaField.value) {
+        return
+    }
+    handleMediaTime(offset)
+}
+function moveFocusLine(e, direction) {
+    if (!e.target.tagName === 'TD') {
+        return
+    }
+    const key = direction === 'up' ? 'previousElementSibling' : 'nextElementSibling'
+    const sibling = e.target.closest('tr')?.[key]
+    if (sibling) {
+        sibling?.querySelector(`td[data-field="${focusField.value}"]`)?.focus()
+    }
+}
 </script>
+<style scoped lang="postcss">
+#focus-td {
+    @apply bg-primary-content;
+}
+</style>
