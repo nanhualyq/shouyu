@@ -96,7 +96,7 @@ watch(currentBook, (val) => {
     }
 })
 async function delBook(book) {
-    if (!confirm('确认删除？')) {
+    if (!confirm('确认删除？（包含内容会报错）')) {
         return
     }
     const { error } = await fetchWrapper(
