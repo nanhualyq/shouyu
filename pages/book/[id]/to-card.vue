@@ -25,7 +25,7 @@
                 <option disabled selected>选择课程</option>
                 <option value="">全部</option>
                 <option v-for="lesson in lessons" :value="lesson.lesson" class="text-ellipsis overflow-hidden">
-                    {{ lesson.lesson }} {{ lesson.text_forigen }}
+                    {{ lesson.lesson }} {{ lesson.text_foreign }}
                 </option>
             </select>
             <select class="select select-bordered w-full" multiple v-model="formData.skills">
@@ -40,7 +40,7 @@
             <select class="select select-bordered w-full" v-model="formData.specificLesson" @change="refreshSentences">
                 <option disabled selected :value="null">选择课程</option>
                 <option v-for="lesson in lessons" :value="lesson.lesson">
-                    {{ lesson.lesson }} {{ lesson.text_forigen }}
+                    {{ lesson.lesson }} {{ lesson.text_foreign }}
                 </option>
             </select>
             <div class="overflow-x-auto w-full" v-show="sentences.length">
@@ -59,7 +59,7 @@
                     <tbody>
                         <tr v-for="row in sentences" class="hover">
                             <th>{{ row.position }}</th>
-                            <td>{{ row.text_forigen }}</td>
+                            <td>{{ row.text_foreign }}</td>
                             <td>{{ row.text_local }}</td>
                             <td>
                                 <select class="select" @change="importSentence($event, row)">

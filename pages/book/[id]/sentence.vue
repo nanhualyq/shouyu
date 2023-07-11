@@ -16,7 +16,7 @@
         <select class="select select-bordered" v-model="formData.lesson" @change="refreshSentences">
             <option disabled selected :value="null">选择课程</option>
             <option v-for="lesson in lessons" :value="lesson.lesson">
-                {{ lesson.lesson }} {{ lesson.text_forigen }}
+                {{ lesson.lesson }} {{ lesson.text_foreign }}
             </option>
         </select>
     </div>
@@ -30,7 +30,7 @@
                     <!-- <th></th> -->
                     <th>lesson</th>
                     <th>position</th>
-                    <th>text_forigen</th>
+                    <th>text_foreign</th>
                     <th>text_local</th>
                     <th>media_url
                         <button class="btn btn-xs" @click="handleBatchUrl">批量</button>
@@ -44,7 +44,7 @@
                 <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)"
                     @blur.capture="handleBlurTr">
                     <!-- <th>{{sentence.id}}</th> -->
-                    <td v-for="field in ['lesson', 'position', 'text_forigen', 'text_local', 'media_url', 'media_start', 'media_end']"
+                    <td v-for="field in ['lesson', 'position', 'text_foreign', 'text_local', 'media_url', 'media_start', 'media_end']"
                         :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
                     <td>
                         <button class="btn btn-xs btn-error" @click="delRow">删除</button>
@@ -216,7 +216,7 @@ async function addRow() {
         lessonInputed = true
     }
     body.position = (sentences.value?.[sentences.value?.length - 1]?.position || 0) + 1
-    body.text_forigen = ''
+    body.text_foreign = ''
     body.text_local = ''
     const { error } = await fetchWrapper(
         useFetch('/api/sentence/', {

@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "sentence" (
 	"book_id"	INTEGER NOT NULL,
 	"lesson"	INTEGER NOT NULL,
 	"position"	INTEGER NOT NULL,
-	"text_forigen"	TEXT NOT NULL,
+	"text_foreign"	TEXT NOT NULL,
 	"text_local"	TEXT NOT NULL,
 	"media_url"	TEXT,
 	"media_start"	TEXT,

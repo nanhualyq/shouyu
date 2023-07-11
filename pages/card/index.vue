@@ -9,8 +9,8 @@
             <option v-for="skill in ['read', 'write', 'listen', 'speak']" :value="skill">{{ skillCn[skill] }}</option>
         </select>
         <label>
-            text_forigen
-            <input class="input input-bordered input-primary" type="text" v-model.lazy="formData.text_forigen">
+            text_foreign
+            <input class="input input-bordered input-primary" type="text" v-model.lazy="formData.text_foreign">
         </label>
         <label>
             text_local
@@ -35,7 +35,7 @@
                     <th></th>
                     <th>Skill</th>
                     <th>due_time</th>
-                    <th>text_forigen</th>
+                    <th>text_foreign</th>
                     <th>text_local</th>
                     <th>update_time</th>
                     <th>操作</th>
@@ -46,7 +46,7 @@
                     <td>{{ card.id }}</td>
                     <td>{{ card.skill }}</td>
                     <td>{{ card.due_time }}</td>
-                    <td>{{ card.text_forigen }}</td>
+                    <td>{{ card.text_foreign }}</td>
                     <td>{{ card.text_local }}</td>
                     <td>{{ card.update_time }}</td>
                     <td>
@@ -82,7 +82,7 @@ const formData = ref({
     limit: 20,
     book_id: '',
     skill: '',
-    text_forigen: '',
+    text_foreign: '',
     text_local: '',
     due_time: '',
     update_time: '',

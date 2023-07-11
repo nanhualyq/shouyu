@@ -29,7 +29,7 @@
         <div class="flex-1 text-primary p-2" v-if="isFlip">
             <TheMedia ref="mediaRef" v-if="currentSkill === 'speak'" :sentence="current?.sentence" />
             <span v-else>
-                {{ current?.sentence?.[currentSkill === 'read' ? 'text_local' : 'text_forigen'] }}
+                {{ current?.sentence?.[currentSkill === 'read' ? 'text_local' : 'text_foreign'] }}
             </span>
         </div>
         <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center items-center">
@@ -105,7 +105,7 @@ function doNext() {
     isFlip.value = false
 }
 const currentSkill = computed(() => current?.value?.card?.skill)
-const frontField = computed(() => currentSkill.value === 'write' ? 'text_local' : 'text_forigen')
+const frontField = computed(() => currentSkill.value === 'write' ? 'text_local' : 'text_foreign')
 const times = computed(() => {
     const last = current?.value?.card?.skilled || 0
     const arr = [
