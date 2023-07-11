@@ -2,6 +2,7 @@ const Database = require('better-sqlite3')
 const fs = require('fs')
 
 const db = new Database('db/sqlite/data.db', { verbose: console.log });
+db.pragma('journal_mode = WAL');
 
 function getVersionNumber(filename) {
     return +(filename?.match(/^\d+/)?.[0] || '')
