@@ -10,6 +10,7 @@
                 <div class="card-actions">
                     <NuxtLink class="btn btn-primary" :to="`/book/${book.id}/to-card`">生成卡片</NuxtLink>
                     <NuxtLink class="btn" :to="`/book/${book.id}/sentence`">管理内容</NuxtLink>
+                    <a class="btn" :href="`/api/book/${book.id}/export`" download="data.json">导出</a>
                     <button class="btn" @click="currentBook = { ...book }">编辑</button>
                     <button class="btn btn-error" @click="delBook(book)">删除</button>
                 </div>
