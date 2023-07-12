@@ -186,7 +186,7 @@ function moveFocusLine(e, direction) {
     }
 }
 async function delRow() {
-    if (!confirm('确认删除？（有卡片关联会删除失败）')) {
+    if (!confirm('将删除所有关联的卡片，确认？')) {
         return
     }
     const { error } = await fetchWrapper(
