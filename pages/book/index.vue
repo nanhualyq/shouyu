@@ -1,18 +1,27 @@
 <template>
     <TheLoading v-if="pending" />
-    <div v-else class="flex gap-2 flex-wrap">
-        <button class="btn btn-primary btn-block" @click="currentBook = {}">添加材料</button>
-        <div v-for="book in books" class="card w-full sm:w-auto bg-base-100 shadow-xl card-bordered">
-            <figure><img :src="book.cover" :alt="book.name" class="max-h-52" /></figure>
+    <div v-else class="flex flex-col gap-2 flex-wrap">
+        <div class="flex gap-2">
+            <button class="flex-1 btn" @click="currentBook = {}">添加材料</button>
+            <label class="flex-1 btn">
+                导入材料
+                <input type="file" class="hidden" @change="importBook" />
+            </label>
+        </div>
+        <div v-for="book in books" class="card lg:card-side bg-base-100 shadow-xl card-bordered">
+            <figure>
+                <img :src="book.cover" :alt="book.name" class="max-h-52" />
+            </figure>
             <div class="card-body">
                 <h2 class="card-title">{{ book.name }}</h2>
-                <!-- <p>{{ book.name }}</p> -->
-                <div class="card-actions">
-                    <NuxtLink class="btn btn-primary" :to="`/book/${book.id}/to-card`">生成卡片</NuxtLink>
+                <p class="flex flex-wrap gap-2">
                     <NuxtLink class="btn" :to="`/book/${book.id}/sentence`">管理内容</NuxtLink>
                     <a class="btn" :href="`/api/book/${book.id}/export`" download="data.json">导出</a>
                     <button class="btn" @click="currentBook = { ...book }">编辑</button>
                     <button class="btn btn-error" @click="delBook(book)">删除</button>
+                </p>
+                <div class="card-actions">
+                    <NuxtLink class="btn btn-primary" :to="`/book/${book.id}/to-card`">生成卡片</NuxtLink>
                 </div>
             </div>
         </div>
@@ -97,7 +106,7 @@ watch(currentBook, (val) => {
     }
 })
 async function delBook(book) {
-    if (!confirm('确认删除？（包含内容会报错）')) {
+    if (!confirm('将删除所有关联的卡片和内容，确认？')) {
         return
     }
     const { error } = await fetchWrapper(
@@ -108,5 +117,22 @@ async function delBook(book) {
     if (!error.value) {
         refreshBooks()
     }
+}
+function importBook(e) {
+    const file = e?.target?.files?.[0]
+    if (!file) {
+        return
+    }
+    fetchWrapper(
+        useFetch('/api/book/import', {
+            method: 'post',
+            body: file
+        })
+    )
+        .then(({ error }) => {
+            if (!error.value) {
+                refreshBooks()
+            }
+        })
 }
 </script>
