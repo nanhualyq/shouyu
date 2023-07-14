@@ -2,6 +2,9 @@ import db from "~/db";
 
 export default defineEventHandler(async event => {
     const query = getQuery(event)
+    if (!query.limit) {
+        query.limit = 20
+    }
     const whereArr = []
     for (const key of Object.keys(query)) {
         if (['limit', 'offset'].includes(key)) {
@@ -10,9 +13,9 @@ export default defineEventHandler(async event => {
         if (query[key]) {
             let sql = ''
             if (['book_id', 'skill'].includes(key)) {
-                sql = `${key}='${query[key]}'`
+                sql = `${key}=@${key}`
             } else {
-                sql = `${key} LIKE '%${query[key]}%'`
+                sql = `${key} LIKE ('%' || @${key} || '%')`
             }
             whereArr.push(sql)
         }
@@ -23,13 +26,13 @@ export default defineEventHandler(async event => {
     }
     const data = await db.prepare(`SELECT *, card.id as id FROM card
     LEFT JOIN sentence ON (card.sentence_id = sentence.id) ${where}
-    LIMIT ${query.limit || 20}
-    OFFSET ${query.offset}`)
-        .all()
+    LIMIT @limit
+    OFFSET @offset`)
+        .all(query)
     const total = await db.prepare(`SELECT count(*) as total FROM card
     LEFT JOIN sentence ON (card.sentence_id = sentence.id) ${where}`)
         .pluck()
-        .get()
+        .get(query)
     return {
         data,
         total

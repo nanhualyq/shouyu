@@ -25,7 +25,7 @@
             <input class="input input-bordered input-primary" type="text" v-model.lazy="formData.update_time">
         </label>
         <button type="button" class="btn btn-error" @click="batchDelete">删除全部</button>
-        <p>总数： {{ data.total }}</p>
+        <p>总数： {{ data?.total }}</p>
     </form>
     <TheLoading class="full" v-if="pending" />
     <div v-else-if="data?.total > 0" class="overflow-x-auto">
@@ -88,8 +88,11 @@ const formData = ref({
     update_time: '',
     offset: computed(() => (page.value - 1) * formData?.value?.limit)
 })
-const { data, pending, refresh } = await useFetch('/api/card', {
-    query: formData.value
+const { data, pending, refresh, error } = await useFetch('/api/card', {
+    query: formData.value,
+    onResponseError({ request, response, options }) {
+        useErrorDialog(response)
+    }
 })
 const { data: books } = await useFetch('/api/book')
 async function batchDelete() {
