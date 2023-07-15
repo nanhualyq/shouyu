@@ -1,8 +1,8 @@
 <template>
     <TheLoading class="full" v-if="pending" />
-    <div v-else-if="!current?.card?.id" class="text-center">
-        没有内容了
-        <NuxtLink class="btn btn-primary" to="/">返回</NuxtLink>
+    <div v-else-if="!current?.card?.id" class="text-center mt-4">
+        <h2>没有内容了</h2>
+        <NuxtLink class="btn btn-primary btn-wide mt-2" to="/">返回</NuxtLink>
     </div>
     <div v-else class="h-full flex flex-col">
         <!-- front -->
@@ -71,7 +71,12 @@ const { data: current, pending, refresh: fetchNext, error } = await useFetch('/a
 if (error.value) {
     useErrorDialog(error)
 }
-const { data: book } = useFetch('/api/book/' + current.value?.sentence?.book_id)
+const book = ref({name: '123'})
+const bookId = current.value?.sentence?.book_id
+if (bookId) {
+    useFetch('/api/book/' + bookId)
+        .then(res => book.value = res?.data?.value)
+}
 const skillCn = useSkillCn()
 let isFlip = ref(false)
 async function submitCard(index) {
