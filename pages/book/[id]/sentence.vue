@@ -27,7 +27,7 @@
             @keydown.down.exact="moveFocusLine($event, 'down')">
             <thead>
                 <tr>
-                    <!-- <th></th> -->
+                    <th></th>
                     <th>lesson</th>
                     <th>position</th>
                     <th>text_foreign</th>
@@ -43,7 +43,7 @@
             <tbody>
                 <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)"
                     @blur.capture="handleBlurTr">
-                    <!-- <th>{{sentence.id}}</th> -->
+                    <th>{{sentence.id}}</th>
                     <td v-for="field in ['lesson', 'position', 'text_foreign', 'text_local', 'media_url', 'media_start', 'media_end']"
                         :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
                     <td>
