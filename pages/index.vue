@@ -4,18 +4,24 @@
         <NuxtLink to="/book" class="btn btn-primary">添加材料</NuxtLink>
     </div>
     <div v-else class="flex flex-col gap-2">
-        <NuxtLink class="btn btn-primary" to="/card/play?random=1&review=1">复习到期卡片</NuxtLink>
+        <div class="flex gap-2 flex-col md:flex-row">
+            <NuxtLink class="btn btn-primary flex-1" :to="reviewUrl">复习到期卡片</NuxtLink>
+            <input v-if="needAhead" v-model="aheadDate" class="input border-gray-500 flex-1" placeholder="请输入截止日期如 2023-12-25" />
+            <button v-else class="btn" @click="needAhead = true">提前复习</button>
+        </div>
 
         <div class="overflow-x-auto" v-if="stats?.length">
             <table class="table table-xs border-collapse border">
                 <thead>
                     <tr>
-                        <th class="border" v-for="row in stats" :class="{'text-primary': row === today}">{{ formatDate(row.date) }}</th>
+                        <th class="border" v-for="row in stats" :class="{ 'text-primary': row === today }">{{
+                            formatDate(row.date) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="border" v-for="row in stats" :class="{'text-primary': row === today}">{{ row.count }}</td>
+                        <td class="border" v-for="row in stats" :class="{ 'text-primary': row === today }">{{ row.count }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -41,4 +47,13 @@ const today = computed(() => stats?.value?.find(o => (new Date()).toISOString().
 function formatDate(str) {
     return str?.replace(/^\d{4}\-/, '')
 }
+const needAhead = ref(false)
+const aheadDate = ref('')
+const reviewUrl = computed(() => {
+    let str = '/card/play?random=1&review=1'
+    if (aheadDate.value) {
+        str += `&due_date=${aheadDate.value}`
+    }
+    return str
+})
 </script>

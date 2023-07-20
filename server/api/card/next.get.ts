@@ -43,7 +43,8 @@ export default defineEventHandler(async event => {
         where.push(`due_time IS NULL OR skilled = 0`)
     }
     if (query.review) {
-        where.push(`date(due_time) <= date()`)
+        const dateParam = query.due_date ? `'${query.due_date}'` : ''
+        where.push(`date(due_time) <= date(${dateParam})`)
     }
     if (random) {
         order = 'ORDER BY random()'
