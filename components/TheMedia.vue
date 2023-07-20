@@ -27,10 +27,10 @@ const paramsError = computed(() => {
         }
     }
     const { media_start, media_end } = sentence || {}
-    if (!isFinite(media_start) || media_start < 0) {
+    if (!isFinite(media_start) || +media_start < 0) {
         return 'media_start is wrong'
     }
-    if (!isFinite(media_end) || media_end <= media_start) {
+    if (!isFinite(media_end) || +media_end <= +media_start) {
         return 'media_end is wrong'
     }
 })
