@@ -43,7 +43,7 @@
             <tbody>
                 <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)"
                     @blur.capture="handleBlurTr">
-                    <th>{{sentence.id}}</th>
+                    <th>{{ sentence.id }}</th>
                     <td v-for="field in ['lesson', 'position', 'text_foreign', 'text_local', 'media_url', 'media_start', 'media_end']"
                         :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
                     <td>
@@ -59,16 +59,18 @@
                 </tr>
             </tfoot>
         </table>
-        <div id="time-modal" class="absolute right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
-            :key="currentSentence?.id" v-if="isMediaField" :style="editorPosition">
-            <TheMedia :sentence="currentSentence" />
-            <div class="btn-group w-full flex gap-1 mt-2">
-                <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
-                <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
-                <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
-                <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
+        <Teleport to="body">
+            <div id="time-modal" class="fixed right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
+                :key="currentSentence?.id" v-if="isMediaField" :style="editorPosition">
+                <TheMedia :sentence="currentSentence" />
+                <div class="btn-group w-full flex gap-1 mt-2">
+                    <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
+                    <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
+                    <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
+                    <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
+                </div>
             </div>
-        </div>
+        </Teleport>
     </div>
 </template>
 <script setup>
