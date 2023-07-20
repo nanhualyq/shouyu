@@ -24,7 +24,7 @@
         <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
             @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
             @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')">
+            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="mediaRef?.replay()">
             <thead>
                 <tr>
                     <th></th>
@@ -60,9 +60,9 @@
             </tfoot>
         </table>
         <Teleport to="body">
-            <div id="time-modal" class="fixed right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
+            <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
                 :key="currentSentence?.id" v-if="isMediaField" :style="editorPosition">
-                <TheMedia :sentence="currentSentence" />
+                <TheMedia ref="mediaRef" :sentence="currentSentence" />
                 <div class="btn-group w-full flex gap-1 mt-2">
                     <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                     <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
@@ -114,6 +114,7 @@ function handleBatchUrl() {
         row.media_url = val
     }
 }
+const mediaRef = ref(null)
 const focusTd = ref(null)
 const focusField = computed(() => focusTd.value?.dataset?.field)
 const isMediaField = computed(() => ['media_start', 'media_end'].includes(focusField.value))
