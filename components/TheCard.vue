@@ -14,8 +14,7 @@
             <p class="current-sentence">
                 <TheMedia ref="mediaRef" v-if="currentSkill === 'listen'" :sentence="current?.sentence" />
                 <span v-else class="inline-flex items-center">
-                    <img :src="`https://www.svgrepo.com/show/${currentSkill === 'speak' ? '316142/microphone.svg' : '519845/translate-you.svg'}`"
-                        class="w-8 h-8">
+                    <img :src="`/${currentSkill === 'speak' ? 'speak' : 'read'}.svg`" class="w-8 h-8" />
                     {{ current?.sentence?.[frontField] }}
                 </span>
             </p>
