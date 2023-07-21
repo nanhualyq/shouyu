@@ -98,7 +98,7 @@ const { data, pending, refresh, error } = await useFetch('/api/card', {
 })
 const { data: books } = await useFetch('/api/book')
 async function batchDelete() {
-    if (!confirm(`共${data?.value?.total}个，确认删除？`)) {
+    if (!confirm(`确认删除全部卡片吗？`)) {
         return
     }
     const { error } = await useFetch('/api/card', {
