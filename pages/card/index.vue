@@ -38,6 +38,7 @@
                     <th>text_foreign</th>
                     <th>text_local</th>
                     <th>update_time</th>
+                    <th>cloze</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -49,6 +50,7 @@
                     <td>{{ card.text_foreign }}</td>
                     <td>{{ card.text_local }}</td>
                     <td>{{ card.update_time }}</td>
+                    <td>{{ card.cloze }}</td>
                     <td>
                         <button class="btn btn-info btn-xs" @click="reviewRow(card.id)">预览</button>
                         <button class="btn btn-error btn-xs" @click="deleteRow(card.id)">删除</button>
@@ -65,7 +67,7 @@
     </div>
 
     <dialog id="preview_dialog" class="modal" @close="onPreviewClose">
-        <form method="dialog" class="modal-box" @submit.prevent="">
+        <form method="dialog" class="modal-box min-h-full h-0" @submit.prevent="">
             <TheCard :query="cardQuery" is-preview v-if="cardQuery['card.id']" />
         </form>
         <form method="dialog" class="modal-backdrop">
