@@ -56,7 +56,7 @@ const skillOptions = computed(() => {
 })
 const formData = ref({
     skills: [],
-    random: true
+    random: false
 })
 watch(skillOptions, () => {
     const val = skillOptions?.value?.[0]?.value
