@@ -71,6 +71,7 @@
                     <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
                     <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
                     <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
+                    <button class="btn" @click="syncMediaProps">重试</button>
                 </div>
             </div>
         </Teleport>
