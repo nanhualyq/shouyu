@@ -110,6 +110,7 @@ async function handleSave() {
     )
     if (!error.value) {
         addToast('已保存')
+        refreshSentences()
     }
 }
 onBeforeRouteLeave(() => {
@@ -209,7 +210,7 @@ async function delRow() {
         })
     )
     if (!error.value) {
-        addToast('已保存')
+        addToast('删除成功')
         refreshSentences()
     }
 }
