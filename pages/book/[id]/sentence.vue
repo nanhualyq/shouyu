@@ -24,7 +24,7 @@
         <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
             @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
             @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="mediaRef?.replay()">
+            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="syncMediaProps()">
             <thead>
                 <tr>
                     <th></th>
@@ -64,8 +64,8 @@
         </table>
         <Teleport to="body">
             <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
-                :key="currentSentence?.id" v-if="isMediaField" :style="editorPosition">
-                <TheMedia ref="mediaRef" :sentence="currentSentence" />
+                v-if="isMediaField" :style="editorPosition">
+                <TheMedia ref="mediaRef" :key="mediaProps.key" :sentence="mediaProps" />
                 <div class="btn-group w-full flex gap-1 mt-2">
                     <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                     <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
@@ -84,6 +84,7 @@ const formData = ref({
     lesson: null
 })
 let currentSentence = ref({})
+const mediaProps = ref({})
 const limit = 50
 const currentPage = ref(1)
 const sentencesQuery = computed(() => ({
@@ -166,6 +167,7 @@ function handleFocusTr(e, sentence) {
     e.target.id = 'focus-td'
     focusTd.value = e.target
     currentSentence.value = sentence
+    syncMediaProps()
 }
 function handleBlurTr(e) {
     if (!e.target.tagName === 'TD') {
@@ -175,6 +177,15 @@ function handleBlurTr(e) {
         currentSentence.value[focusField.value] = e.target?.textContent
     }
 }
+function syncMediaProps() {
+    const { media_url, media_start, media_end } = currentSentence.value || {}
+    mediaProps.value = {
+        key: media_url + media_start + media_end,
+        media_url, media_start, media_end
+    } 
+    mediaRef?.value?.replay()
+}
+
 function time2Seconds(h, m, s) {
     let seconds = +s
     if (m > 0) {
