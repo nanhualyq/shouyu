@@ -13,7 +13,7 @@
     </div>
     <div class="flex gap-2">
         <button class="btn btn-secondary" @click="addRow">+新增一句</button>
-        <select class="select select-bordered" v-model="formData.lesson" @change="refreshSentences">
+        <select class="select select-bordered" v-model="formData.lesson">
             <option disabled selected :value="null">选择课程</option>
             <option v-for="lesson in lessons" :value="lesson.lesson">
                 {{ lesson.lesson }} {{ lesson.text_foreign }}
@@ -53,8 +53,11 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="6" class="text-center">
-                        <button class="btn btn-primary" @click="handleSave">保存修改</button>
+                    <th colspan="9" class="text-center">
+                        <select class="select" v-if="pageCount > 1" v-model="currentPage">
+                            <option v-for="page in pageCount" :value="page">第{{page}}页</option>
+                        </select>
+                        <button class="btn btn-primary ml-4" @click="handleSave">保存修改</button>
                     </th>
                 </tr>
             </tfoot>
@@ -81,14 +84,21 @@ const formData = ref({
     lesson: null
 })
 let currentSentence = ref({})
+const limit = 50
+const currentPage = ref(1)
 const sentencesQuery = computed(() => ({
     book_id: book?.value?.id,
-    lesson: formData?.value?.lesson
+    lesson: formData?.value?.lesson,
+    limit,
+    offset: (currentPage.value - 1) * limit
 }))
-const { data: sentences, refresh: refreshSentences, pending } = useFetch('/api/sentence', {
+const { data: sentencesResult, refresh: refreshSentences, pending } = useFetch('/api/sentence', {
     query: sentencesQuery,
-    watch: false,
     immediate: false
+})
+const sentences = computed(() => sentencesResult?.value?.data)
+const pageCount = computed(() => {
+    return Math.ceil(sentencesResult?.value?.total / 50) || 0
 })
 async function handleSave() {
     const { error } = await fetchWrapper(
@@ -204,8 +214,9 @@ async function delRow() {
     }
 }
 async function addRow() {
+    const { book_id, lesson } = sentencesQuery.value || {}
     const body = {
-        ...sentencesQuery.value
+        book_id, lesson
     }
     // 课程是手动输入的话，完成后要自动选中该课程
     let lessonInputed = false
