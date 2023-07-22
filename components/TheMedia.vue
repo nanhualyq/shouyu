@@ -7,13 +7,19 @@
         </svg>
         <span>{{ paramsError }}</span>
     </div>
-    <audio v-else ref="mediaRef" :class="{ loading: pending }" :src="mediaUrl" controls autoplay @loadstart="onStart"
-        @canplaythrough="pending = false" @error="onError"></audio>
-    <p v-if="loadError" class="text-error">{{ mediaUrl }} 加载失败!</p>
+    <component :is="mediaTag" v-else ref="mediaRef" :class="{ loading: pending }" :src="mediaUrl" controls autoplay
+        @loadstart="onStart" @canplaythrough="pending = false" @error="onError" />
+    <p v-if="loadError" class="text-error">{{ loadError }}</p>
 </template>
 <script setup>
 const { sentence } = defineProps({
     sentence: Object
+})
+const mediaTag = computed(() => {
+    if (sentence?.media_url?.endsWith('mp4')) {
+        return 'video'
+    }
+    return 'audio'
 })
 const mediaUrl = computed(() => {
     const { media_url, media_start, media_end } = sentence || {}
@@ -26,23 +32,15 @@ const paramsError = computed(() => {
             return `${key} is empty`
         }
     }
-    const { media_start, media_end } = sentence || {}
-    if (!isFinite(media_start) || +media_start < 0) {
-        return 'media_start is wrong'
-    }
-    if (!isFinite(media_end) || +media_end <= +media_start) {
-        return 'media_end is wrong'
-    }
 })
 let pending = ref(false)
 let loadError = ref(false)
 function onStart() {
-    loadError.value = false
+    loadError.value = ''
     pending.value = true
 }
 function onError(e) {
-    console.log(e);
-    loadError.value = true
+    loadError.value = mediaRef?.value?.error?.message
     pending.value = false
 }
 const mediaRef = ref(null)

@@ -10,17 +10,22 @@ export default defineEventHandler(async event => {
     const { mediaPath } = useRuntimeConfig()
     const url = mediaPath + media_url
     const temFile = '/tmp/' + Date.now() + postfix
-    await new Promise((resolve, reject) => {
-        ffmpeg(url)
-            .inputOptions([
-                `-ss ${media_start}`,
-                `-to ${media_end}`
-            ])
-            .output(temFile)
-            .on('end', resolve)
-            .on('error', reject)
-            .run()
-    })
+    try {
+        await new Promise((resolve, reject) => {
+            ffmpeg(url)
+                .inputOptions([
+                    `-ss ${media_start}`,
+                    `-to ${media_end}`
+                ])
+                .size('640x?')
+                .output(temFile)
+                .on('end', resolve)
+                .on('error', reject)
+                .run()
+        })
+    } catch (error) {
+        throw createError({ statusMessage: error?.message })
+    }
     setTimeout(() => {
         fs.rmSync(temFile)
     }, 1000 * 10);
