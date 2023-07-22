@@ -55,7 +55,7 @@
                 <tr>
                     <th colspan="9" class="text-center">
                         <select class="select" v-if="pageCount > 1" v-model="currentPage">
-                            <option v-for="page in pageCount" :value="page">第{{page}}页</option>
+                            <option v-for="page in pageCount" :value="page">第{{ page }}页</option>
                         </select>
                         <button class="btn btn-primary ml-4" @click="handleSave">保存修改</button>
                     </th>
@@ -175,13 +175,42 @@ function handleBlurTr(e) {
         currentSentence.value[focusField.value] = e.target?.textContent
     }
 }
+function time2Seconds(h, m, s) {
+    let seconds = +s
+    if (m > 0) {
+        seconds += m * 60
+    }
+    if (h > 0) {
+        seconds += h * 60 ** 2
+    }
+    return seconds
+}
+function seconds2Time(seconds) {
+    let rest = +seconds
+    const arr = []
+    for (let i = 2; i > 0; i--) {
+        const base = 60 ** i
+        let res = Math.floor(rest / base)
+        rest -= res * base
+        // if (res === 0) {
+        //     continue
+        // }
+        arr.push(String(res).padStart('2', '0'))
+    }
+    arr.push(+rest.toFixed(2))
+    return arr.join(':')
+}
 function handleMediaTime(offset) {
     let val = currentSentence.value[focusField.value]
-    val = Number(val) + offset
+    const { h, m, s } = String(val || '')
+        ?.match(/^(?:(?:(?<h>\d{2}):)?(?<m>\d{2}):)?(?<s>\d{2}(?:\.\d+)?)$/)
+        ?.groups || {}
+    val = time2Seconds(h, m, s || val) + offset
     if (isNaN(val) || val < 0) {
         val = 0
     }
-    currentSentence.value[focusField.value] = val.toFixed(2)
+    const isComplex = !!m
+    currentSentence.value[focusField.value] = isComplex ? seconds2Time(val) : val.toFixed(2)
 }
 function handleArrow(offset) {
     if (!isMediaField.value) {
