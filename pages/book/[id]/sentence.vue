@@ -200,17 +200,14 @@ function time2Seconds(h, m, s) {
 function seconds2Time(seconds) {
     let rest = +seconds
     const arr = []
-    for (let i = 2; i > 0; i--) {
+    for (let i = 2; i >= 0; i--) {
         const base = 60 ** i
         let res = Math.floor(rest / base)
         rest -= res * base
-        // if (res === 0) {
-        //     continue
-        // }
         arr.push(String(res).padStart('2', '0'))
     }
-    arr.push(+rest.toFixed(2))
-    return arr.join(':')
+    const decimal = String(rest)?.match(/(?:^\d+)?(.\d{1,3})/)?.[1]
+    return arr.join(':') + decimal
 }
 function handleMediaTime(offset) {
     let val = currentSentence.value[focusField.value]
