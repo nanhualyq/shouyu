@@ -24,7 +24,7 @@
         <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
             @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
             @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="syncMediaProps()">
+            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay">
             <thead>
                 <tr>
                     <th></th>
@@ -187,13 +187,16 @@ function handleBlurTr(e) {
         currentSentence.value[focusField.value] = e.target?.textContent
     }
 }
+function replay() {
+    mediaRef?.value?.replay()
+    syncMediaProps()
+}
 function syncMediaProps() {
     const { media_url, media_start, media_end } = currentSentence.value || {}
     mediaProps.value = {
         key: media_url + media_start + media_end,
         media_url, media_start, media_end
     }
-    mediaRef?.value?.replay()
 }
 
 function time2Seconds(h, m, s) {
