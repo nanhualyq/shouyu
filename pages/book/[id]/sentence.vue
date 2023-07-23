@@ -29,11 +29,15 @@
                 <tr>
                     <th></th>
                     <th>lesson</th>
-                    <th>position</th>
+                    <th>position
+                        <br>
+                        <button class="btn btn-xs" @click="resetPosition">本课重置</button>
+                    </th>
                     <th>text_foreign</th>
                     <th>text_local</th>
                     <th>media_url
-                        <button class="btn btn-xs" @click="handleBatchUrl">批量</button>
+                        <br>
+                        <button class="btn btn-xs" @click="handleBatchUrl">批量修改</button>
                     </th>
                     <th>media_start</th>
                     <th>media_end</th>
@@ -311,6 +315,21 @@ async function importSentence(e, row) {
     )
     addToast(`成功：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`)
     e.target.value = e.target.options[0].value
+}
+function resetPosition() {
+    const { book_id, lesson } = sentencesQuery.value
+    fetchWrapper(
+        useFetch(`/api/sentence/reset-position`, {
+            method: 'PATCH',
+            body: {
+                book_id, lesson
+            }
+        })
+    )
+    .then(() => {
+        addToast('重置完成')
+        refreshSentences()
+    })
 }
 </script>
 <style scoped lang="postcss">
