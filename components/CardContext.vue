@@ -23,7 +23,7 @@ async function fetchSentence() {
     pending.value = true
     useFetch('/api/sentence', { query })
         .then(res => {
-            data.value = res?.data?.value?.[0]
+            data.value = res?.data?.value?.data?.[0]
             loaded.value = true
         })
         .finally(() => pending.value = false)
