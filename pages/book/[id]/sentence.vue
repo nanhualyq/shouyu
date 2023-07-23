@@ -112,6 +112,9 @@ const pageCount = computed(() => {
     return Math.ceil(sentencesResult?.value?.total / 50) || 0
 })
 async function handleSave() {
+    // tirgger current input sync data
+    document?.activeElement?.blur()
+
     const { error } = await fetchWrapper(
         useFetch('/api/sentence', {
             method: 'PATCH',
@@ -329,10 +332,10 @@ function resetPosition() {
             }
         })
     )
-    .then(() => {
-        addToast('重置完成')
-        refreshSentences()
-    })
+        .then(() => {
+            addToast('重置完成')
+            refreshSentences()
+        })
 }
 </script>
 <style scoped lang="postcss">
