@@ -42,11 +42,16 @@
             </thead>
             <tbody>
                 <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)"
-                    @blur.capture="handleBlurTr">
+                    @blur.capture="handleBlurTr" class="hover">
                     <th>{{ sentence.id }}</th>
                     <td v-for="field in ['lesson', 'position', 'text_foreign', 'text_local', 'media_url', 'media_start', 'media_end']"
                         :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
-                    <td>
+                    <td class="flex gap-2 flex-wrap">
+                        <select class="select select-xs" @change="importSentence($event, sentence)">
+                            <option disabled selected>生成卡片</option>
+                            <option value="">全部</option>
+                            <option v-for="skill in skills" :value="skill">{{ skill }}</option>
+                        </select>
                         <button class="btn btn-xs btn-error" @click="delRow">删除</button>
                     </td>
                 </tr>
@@ -183,7 +188,7 @@ function syncMediaProps() {
     mediaProps.value = {
         key: media_url + media_start + media_end,
         media_url, media_start, media_end
-    } 
+    }
     mediaRef?.value?.replay()
 }
 
@@ -285,6 +290,27 @@ async function addRow() {
         }
         refreshSentences()
     }
+}
+const skills = computed(() => {
+    return book?.value?.skills?.split(',')
+})
+async function importSentence(e, row) {
+    const body = {
+        book_id: book?.value?.id,
+        lessons: [row.lesson],
+        position: [row.position]
+    }
+    if (e.target.value) {
+        body.skills = [e.target.value]
+    }
+    const { data } = await fetchWrapper(
+        useFetch('/api/card/import', {
+            method: 'post',
+            body
+        })
+    )
+    addToast(`成功：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`)
+    e.target.value = e.target.options[0].value
 }
 </script>
 <style scoped lang="postcss">
