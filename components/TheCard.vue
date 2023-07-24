@@ -1,6 +1,5 @@
 <template>
-    <TheLoading class="full" v-if="pending" />
-    <div v-else-if="!current?.card?.id" class="text-center mt-4">
+    <div v-if="!current?.card?.id" class="text-center mt-4">
         <h2>没有内容了</h2>
         <NuxtLink class="btn btn-primary btn-wide mt-2" to="/">返回</NuxtLink>
     </div>
@@ -69,10 +68,9 @@ const { query, isPreview } = defineProps({
     },
     isPreview: Boolean
 })
-const { data: current, pending, refresh: fetchNext, error } = await useFetch('/api/card/next', { query })
-if (error.value) {
-    useErrorDialog(error)
-}
+const { data: current, refresh: fetchNext, error } = await fetchWrapper(
+    useFetch('/api/card/next', { query })
+)
 const book = ref({})
 const bookId = current.value?.sentence?.book_id
 if (bookId) {
@@ -92,20 +90,18 @@ async function submitCard(index) {
     const { num, postfix } = parseTime(time)
     const sqlitePostfix = postfix === 'm' ? 'minutes' : 'days'
     const { id } = current?.value?.card
-    pending.value = true
-    const { error } = await useFetch(`/api/card/${id}`, {
-        method: 'PATCH',
-        body: {
-            due_time: `+${num} ${sqlitePostfix}`,
-            skilled: postfix === 'm' ? 0 : num
-        }
-    })
-        .finally(() => pending.value = false)
-    if (error.value) {
-        useErrorDialog(error)
-        return
+    const { error } = await fetchWrapper(
+        useFetch(`/api/card/${id}`, {
+            method: 'PATCH',
+            body: {
+                due_time: `+${num} ${sqlitePostfix}`,
+                skilled: postfix === 'm' ? 0 : num
+            }
+        })
+    )
+    if (!error.value) {
+        doNext()
     }
-    doNext()
 }
 function doNext() {
     fetchNext()
@@ -162,16 +158,14 @@ async function handleDelete() {
     if (!confirm('确认删除？')) {
         return
     }
-    pending.value = true
-    const { error } = await useFetch('/api/card/' + current?.value?.card?.id, {
-        method: 'delete'
-    })
-        .finally(() => pending.value = false)
-    if (error.value) {
-        useErrorDialog(error)
-        return
+    const { error } = await fetchWrapper(
+        useFetch('/api/card/' + current?.value?.card?.id, {
+            method: 'delete'
+        })
+    )
+    if (!error.value) {
+        doNext()
     }
-    doNext()
 }
 function showAnswer() {
     isFlip.value = true
