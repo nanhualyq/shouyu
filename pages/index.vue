@@ -6,7 +6,8 @@
     <div v-else class="flex flex-col gap-2">
         <div class="flex gap-2 flex-col md:flex-row">
             <NuxtLink class="btn btn-primary flex-1" :to="reviewUrl">复习到期卡片</NuxtLink>
-            <input v-if="needAhead" v-model="aheadDate" class="input border-gray-500 flex-1" placeholder="请输入截止日期如 2023-12-25" />
+            <input v-if="needAhead" v-model="aheadDate" class="input border-gray-500 flex-1"
+                placeholder="请输入截止日期如 2023-12-25" />
             <button v-else class="btn" @click="needAhead = true">提前复习</button>
         </div>
 
@@ -27,13 +28,17 @@
             </table>
         </div>
 
-        <div class="card card-side bg-base-100 shadow-xl" v-for="book in books">
-            <figure class="w-40"><img :src="book.cover" :alt="book.name" /></figure>
-            <div class="card-body">
-                <h2 class="card-title">{{ book.name }}</h2>
-                <!-- <p>Click the button to watch on Jetflix app.</p> -->
-                <div class="card-actions justify-end">
-                    <NuxtLink class="btn btn-secondary" :to="`/book/${book.id}/plan`" v-show="book?.new_total">学习新卡({{ book.new_total }})</NuxtLink>
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="card card-side bg-base-100 shadow-xl md:w-1/3" v-for="book in books">
+                <figure><img :src="book.cover" :alt="book.name" style="max-width: 10rem" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{ book.name }}</h2>
+                    <p :class="{ 'text-gray-400': book.new_total === 0 }">
+                        剩余新卡：{{ book.new_total }}</p>
+                    <div class="card-actions justify-end">
+                        <NuxtLink v-show="book.new_total" class="btn btn-secondary" :to="`/book/${book.id}/plan`">
+                            学习新卡</NuxtLink>
+                    </div>
                 </div>
             </div>
         </div>
