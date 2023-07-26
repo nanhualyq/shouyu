@@ -244,7 +244,7 @@ async function submitCloze() {
 const isCloze = computed(() => !!current?.value?.card?.cloze)
 const backTextHtml = computed(() => {
     const isRead = currentSkill.value === 'read'
-    const text = current?.value?.sentence?.[isRead ? 'text_local' : 'text_foreign']
+    let text = current?.value?.sentence?.[isRead ? 'text_local' : 'text_foreign']
     const cloze = current?.value?.card?.cloze
     if (!cloze) {
         return text
@@ -252,17 +252,18 @@ const backTextHtml = computed(() => {
     if (!/^\d+,\d+$/.test(cloze)) {
         return `cloze error: ${cloze}`
     }
+    text = [...text]
     const [start, end] = cloze?.split(',')
     let str = ''
-    str += text?.slice(0, start)
-    let clozeText = text?.slice(start, end)
+    str += text?.slice(0, start).join('')
+    let clozeText = text?.slice(start, end)?.join('')
     if (!isFlip.value) {
-        const words = clozeText?.match(/\S+(?:\s+)?/g)?.length
-        clozeText = words > 1 ? `${words} words` : `${clozeText.length} characters`
+        const words = clozeText?.match(/\S+(?:\s+)?/gu)?.length
+        clozeText = words > 1 ? `${words} words` : `${end - start} characters`
         clozeText = `[${clozeText}]`
     }
     str += `<mark>${clozeText}</mark>`
-    str += text?.slice(end)
+    str += text?.slice(end).join('')
     return str
 })
 </script>
