@@ -12,23 +12,24 @@
     <p v-if="loadError" class="text-error">{{ loadError }}</p>
 </template>
 <script setup>
-const { sentence } = defineProps({
+const props = defineProps({
     sentence: Object
 })
+const sentence = toRef(props, 'sentence')
 const mediaTag = computed(() => {
-    if (sentence?.media_url?.endsWith('mp4')) {
+    if (sentence?.value?.media_url?.endsWith('mp4')) {
         return 'video'
     }
     return 'audio'
 })
 const mediaUrl = computed(() => {
-    const { media_url, media_start, media_end } = sentence || {}
+    const { media_url, media_start, media_end } = sentence?.value || {}
     const search = new URLSearchParams({ media_url, media_start, media_end })
     return '/api/media?' + search.toString()
 })
 const paramsError = computed(() => {
     for (const key of ['media_url', 'media_start', 'media_end']) {
-        if (!sentence[key]) {
+        if (!sentence?.value[key]) {
             return `${key} is empty`
         }
     }

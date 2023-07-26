@@ -5,7 +5,7 @@
     </div>
     <div v-else class="h-full flex flex-col">
         <!-- front -->
-        <div class="flex-1 p-2">
+        <div class="flex-1 p-2" :key="current?.card?.id">
             <CardContext class="other-sentence"
                 :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position - 1 }"
                 label="查看上一句" :field="frontField" />
@@ -68,15 +68,25 @@ const { query, isPreview } = defineProps({
     },
     isPreview: Boolean
 })
-const { data: current, refresh: fetchNext, error } = await fetchWrapper(
-    useFetch('/api/card/next', { query })
-)
-const book = ref({})
-const bookId = current.value?.sentence?.book_id
-if (bookId) {
-    useFetch('/api/book/' + bookId)
-        .then(res => book.value = res?.data?.value)
-}
+const fullLoading = useState('fullLoading')
+const { data: current, pending, refresh: fetchNext, error } = await useFetch('/api/card/next', { query })
+watch(pending, val => {
+    fullLoading.value = val
+})
+watch(error, val => {
+    if (error.value) {
+        useErrorDialog(error)
+    }
+})
+const book = ref()
+watch(current, () => {
+    if (book?.value?.id !== current.value?.sentence?.book_id) {
+        useFetch('/api/book/' + current.value?.sentence?.book_id)
+            .then(res => book.value = res?.data?.value)
+    }
+}, {
+    immediate: true
+})
 const skillCn = useSkillCn()
 let isFlip = ref(false)
 async function submitCard(index) {
@@ -169,9 +179,6 @@ async function handleDelete() {
 }
 function showAnswer() {
     isFlip.value = true
-    if (isCloze.value) {
-        current.value.card.cloze = ''
-    }
 }
 const mediaRef = ref(null)
 function replayMedia() {
@@ -247,7 +254,7 @@ async function submitCloze() {
 const isCloze = computed(() => !!current?.value?.card?.cloze)
 const backTextHtml = computed(() => {
     const isRead = currentSkill.value === 'read'
-    const text = current?.value?.sentence?.[isRead ? 'text_local' : 'text_foreign']
+    let text = current?.value?.sentence?.[isRead ? 'text_local' : 'text_foreign']
     const cloze = current?.value?.card?.cloze
     if (!cloze) {
         return text
@@ -255,11 +262,18 @@ const backTextHtml = computed(() => {
     if (!/^\d+,\d+$/.test(cloze)) {
         return `cloze error: ${cloze}`
     }
+    text = [...text]
     const [start, end] = cloze?.split(',')
     let str = ''
-    str += text?.slice(0, start)
-    str += `<mark>[...]</mark>`
-    str += text?.slice(end)
+    str += text?.slice(0, start).join('')
+    let clozeText = text?.slice(start, end)?.join('')
+    if (!isFlip.value) {
+        const words = clozeText?.match(/\S+(?:\s+)?/gu)?.length
+        clozeText = words > 1 ? `${words} words` : `${end - start} characters`
+        clozeText = `[${clozeText}]`
+    }
+    str += `<mark>${clozeText}</mark>`
+    str += text?.slice(end).join('')
     return str
 })
 </script>

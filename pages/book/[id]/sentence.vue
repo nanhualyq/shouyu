@@ -74,7 +74,7 @@
         <Teleport to="body">
             <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
                 v-if="isMediaField" :style="editorPosition">
-                <TheMedia ref="mediaRef" :key="mediaProps.key" :sentence="mediaProps" />
+                <TheMedia ref="mediaRef" :sentence="mediaProps" />
                 <div class="btn-group w-full flex gap-1 mt-2">
                     <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                     <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
@@ -144,7 +144,13 @@ const focusTd = ref(null)
 const focusField = computed(() => focusTd.value?.dataset?.field)
 const isMediaField = computed(() => ['media_start', 'media_end'].includes(focusField.value))
 const editorPosition = computed(() => {
-    const { bottom } = focusTd.value?.getBoundingClientRect()
+    const { bottom, top } = focusTd.value?.getBoundingClientRect()
+    if (bottom > document.body.clientHeight / 2) {
+        return {
+            top: top + 'px',
+            transform: 'translateY(-100%)'
+        }
+    }
     return {
         top: bottom + 'px'
     }
@@ -197,7 +203,6 @@ function replay() {
 function syncMediaProps() {
     const { media_url, media_start, media_end } = currentSentence.value || {}
     mediaProps.value = {
-        key: media_url + media_start + media_end,
         media_url, media_start, media_end
     }
 }
