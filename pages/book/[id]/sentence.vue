@@ -144,7 +144,13 @@ const focusTd = ref(null)
 const focusField = computed(() => focusTd.value?.dataset?.field)
 const isMediaField = computed(() => ['media_start', 'media_end'].includes(focusField.value))
 const editorPosition = computed(() => {
-    const { bottom } = focusTd.value?.getBoundingClientRect()
+    const { bottom, top } = focusTd.value?.getBoundingClientRect()
+    if (bottom > document.body.clientHeight / 2) {
+        return {
+            top: top + 'px',
+            transform: 'translateY(-100%)'
+        }
+    }
     return {
         top: bottom + 'px'
     }
