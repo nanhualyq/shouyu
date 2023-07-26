@@ -19,4 +19,9 @@
 
 <script setup>
 const showFullLoading = useState('fullLoading', () => ref(false))
+useHead({
+  htmlAttrs: {
+    'data-theme': "corporate"
+  }
+})
 </script>
