@@ -169,9 +169,6 @@ async function handleDelete() {
 }
 function showAnswer() {
     isFlip.value = true
-    if (isCloze.value) {
-        current.value.card.cloze = ''
-    }
 }
 const mediaRef = ref(null)
 function replayMedia() {
@@ -258,7 +255,13 @@ const backTextHtml = computed(() => {
     const [start, end] = cloze?.split(',')
     let str = ''
     str += text?.slice(0, start)
-    str += `<mark>[...]</mark>`
+    let clozeText = text?.slice(start, end)
+    if (!isFlip.value) {
+        const words = clozeText?.match(/\S+(?:\s+)?/g)?.length
+        clozeText = words > 1 ? `${words} words` : `${clozeText.length} characters`
+        clozeText = `[${clozeText}]`
+    }
+    str += `<mark>${clozeText}</mark>`
     str += text?.slice(end)
     return str
 })
