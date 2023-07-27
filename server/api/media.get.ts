@@ -6,10 +6,11 @@ ffmpeg.setFfmpegPath(path)
 
 export default defineEventHandler(async event => {
     const { media_url, media_start, media_end } = getQuery(event)
-    const [, postfix] = String(media_url)?.match(/(\.\w+)$/) || []
+    // const [, postfix] = String(media_url)?.match(/(\.\w+)$/) || []
+    const postfix = 'webm'
     const { mediaPath } = useRuntimeConfig()
     const url = mediaPath + media_url
-    const temFile = '/tmp/' + Date.now() + postfix
+    const temFile = `/tmp/${Date.now()}.${postfix}`
     try {
         await new Promise((resolve, reject) => {
             ffmpeg(url)
