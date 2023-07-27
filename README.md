@@ -8,8 +8,9 @@
 - 隐私：数据存放在本地，拒绝被收集、被分析、被打标签
 - 更少遗忘：类似Anki定期主动回忆测试，还支持在线编辑音频时间位置，练习听力、口语更方便
 
-[![demo](./public/favicon-32x32.png)](https://private-user-images.githubusercontent.com/6212850/256433333-aae76fc8-c538-4b5f-b7a8-1d4608b4f3b1.mp4?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE2OTA0MzU3NjQsIm5iZiI6MTY5MDQzNTQ2NCwicGF0aCI6Ii82MjEyODUwLzI1NjQzMzMzMy1hYWU3NmZjOC1jNTM4LTRiNWYtYjdhOC0xZDQ2MDhiNGYzYjEubXA0P1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDcyNyUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA3MjdUMDUyNDI0WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZDE1NWRmNWI4ZDBjY2IzM2U0ZTA3NTk5NzJmZGM0MTVlYmUyZjdlMDU4ZDkyYjNjYzMzNTE4YmJmMDc5NzA1MSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.r1I0eMotCfqK8nTROlM4xBMT_xt8vE2f7-oMJ7MAX0E)
+[![demo](./public/favicon-32x32.png)](https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256471748-38d13e5c-2b44-4aa2-8b59-54b4471ea3e3.mp4)
 
+---
 ## 如何开始
 
 安装依赖
@@ -29,6 +30,7 @@ npm run dev
 
 访问 `http://localhost:3000`
 
+---
 ## 创作背景
 过去几年我都在用 `Anki` 学新概念英语和赖世雄美语，为了练习听力和口语，需要将每一句对白的音频用 `Audacity` 剪辑出来，才能在 `Anki` 卡片上播放。
 
@@ -41,6 +43,15 @@ npm run dev
 
 一开始本不打算开源，觉得这么粗糙的东西很丢人，但最近看到的一些文章给了我极大的启发，让我明白了一个道理：”迭代才是最重要的，不用在乎起点“，所以就不怕被笑话了，何况真有可能帮到一两个人，也算是做出一点微小贡献回馈社会了。
 
+---
+## 咨询
+Email: `nanhualyq@gmail.com`
+<details>
+<summary>微信号：shouxiaoyu2023</summary>
+<img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256467999-89fe3722-ee40-4898-aaaa-f16574ac4a9d.png"/>
+</details>
+
+---
 ## 捐助
 
 多少都是鼓励，大小都是帮助，随意就好。
@@ -49,16 +60,9 @@ npm run dev
 
 支付宝：
 
-<img src="https://private-user-images.githubusercontent.com/6212850/256222913-b3d7db63-5cba-4540-84d6-a92bf9adcfaf.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE2OTAzNzI5NjIsIm5iZiI6MTY5MDM3MjY2MiwicGF0aCI6Ii82MjEyODUwLzI1NjIyMjkxMy1iM2Q3ZGI2My01Y2JhLTQ1NDAtODRkNi1hOTJiZjlhZGNmYWYuanBnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDcyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA3MjZUMTE1NzQyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9YTdmOGVkZjJjMDc1YWI1Nzk2NTJiZDUzOTQ1NjhhNGI1YTkyZjNkYWMyNDkzZGIxYzY3ZjNkMzllNWNjYzI3OSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.1C20OkNtADxP2z8KaMmWa2hEhWvegjfc8qBgbRPnLiQ"/>
+<img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256462604-152a3217-5ff9-4a26-999f-0d5c20b1087a.jpg"/>
 
-<details>
-<summary>微信支付：</summary>
-<img src="https://private-user-images.githubusercontent.com/6212850/256222918-1a2762ad-30dd-4124-a5af-b52128231912.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE2OTAzNzI5NjIsIm5iZiI6MTY5MDM3MjY2MiwicGF0aCI6Ii82MjEyODUwLzI1NjIyMjkxOC0xYTI3NjJhZC0zMGRkLTQxMjQtYTVhZi1iNTIxMjgyMzE5MTIuanBnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDcyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA3MjZUMTE1NzQyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZTEzYTFmZWJhZDUzNDMzOTEwYWE1ZTkwZWI1MWM5M2U0ZmY5MGE3ZGE2NzA2NjY3YzUyMWI0NWEyYWU5MTFkYiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.lJJ8N8b66hsRx1HojocYuqF6QTiIdA9kh8cMTwjGbR8"/>
-</details>
 
-## 咨询
-Email: `nanhualyq@gmail.com`
-<details>
-<summary>微信：</summary>
-<img src="https://private-user-images.githubusercontent.com/6212850/256238438-dc0f6c6b-2838-45e2-9bb3-45d4f782e853.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE2OTAzNzY3ODgsIm5iZiI6MTY5MDM3NjQ4OCwicGF0aCI6Ii82MjEyODUwLzI1NjIzODQzOC1kYzBmNmM2Yi0yODM4LTQ1ZTItOWJiMy00NWQ0Zjc4MmU4NTMucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMDcyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzA3MjZUMTMwMTI4WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9OWFiZTJlYzJkZTAwNTBmMmIxYzQxMzZjMDc4MTBmNzM2NGVkN2ViZDdkNTRiNGJhZGY2MTJmZWI4ZjBlNTlmNSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.y3_5NAyyx4JBc1bNvIM_tqvSDjn7gTpjSTfN2VXo01Q"/>
-</details>
+微信支付：
+
+<img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256462827-27030ec3-edae-447f-87ac-6590b685f644.jpg"/>
