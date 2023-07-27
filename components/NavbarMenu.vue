@@ -8,6 +8,9 @@
     <li>
         <NuxtLink :class="{ active: isChildren('/book') }" to="/book">材料</NuxtLink>
     </li>
+    <li>
+        <NuxtLink activeClass="active" to="/help">帮助</NuxtLink>
+    </li>
 </template>
 
 <script setup>
