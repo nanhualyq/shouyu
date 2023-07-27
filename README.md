@@ -8,7 +8,8 @@
 - 隐私：数据存放在本地，拒绝被收集、被分析、被打标签
 - 更少遗忘：类似Anki定期主动回忆测试，还支持在线编辑音频时间位置，练习听力、口语更方便
 
-[![demo](./public/favicon-32x32.png)](https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256471748-38d13e5c-2b44-4aa2-8b59-54b4471ea3e3.mp4)
+<!-- demo video -->
+https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce
 
 ---
 ## 如何开始
