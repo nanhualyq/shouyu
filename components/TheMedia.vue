@@ -17,7 +17,7 @@ const props = defineProps({
 })
 const sentence = toRef(props, 'sentence')
 const mediaTag = computed(() => {
-    if (sentence?.value?.media_url?.endsWith('mp4')) {
+    if (!sentence?.value?.media_url?.endsWith('mp3')) {
         return 'video'
     }
     return 'audio'
