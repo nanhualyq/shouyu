@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     ],
     app: {
         head: {
-            title: `授渔 - ${process.env.NODE_ENV}`
+            title: `授渔${process.env.NODE_ENV === 'production' ? '' : ' - ' + process.env.NODE_ENV}`
         }
     },
     runtimeConfig: {
