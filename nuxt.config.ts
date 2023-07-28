@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     ],
     app: {
         head: {
-            title: `授渔`
+            title: `授渔 - ${process.env.NODE_ENV}`
         }
     },
     runtimeConfig: {

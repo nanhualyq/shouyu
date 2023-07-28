@@ -18,7 +18,7 @@ export default defineEventHandler(async event => {
                     `-ss ${media_start}`,
                     `-to ${media_end}`
                 ])
-                .size('640x?')
+                // .size('640x?')
                 .output(temFile)
                 .on('end', resolve)
                 .on('error', reject)

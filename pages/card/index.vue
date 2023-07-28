@@ -27,8 +27,7 @@
         <button type="button" class="btn btn-error" @click="batchDelete">删除全部</button>
         <p>总数： {{ data?.total }}</p>
     </form>
-    <TheLoading class="full" v-if="pending" />
-    <div v-else-if="data?.total > 0" class="overflow-x-auto">
+    <div v-if="data?.total > 0" class="overflow-x-auto">
         <table class="table">
             <thead>
                 <tr>
@@ -59,11 +58,7 @@
             </tbody>
         </table>
 
-        <div class="join grid grid-cols-3 items-center">
-            <button class="join-item btn btn-outline" :disabled="page === 1" @click="page--">上一页</button>
-            <p class="text-center">{{ page }} / {{ maxPage }}</p>
-            <button class="join-item btn btn-outline" :disabled="page === maxPage" @click="page++">下一页</button>
-        </div>
+        <ThePagination @update:modelValue="pageChange" :total="data?.total" :limit="formData.limit" />
     </div>
 
     <dialog id="preview_dialog" class="modal" @close="onPreviewClose">
@@ -78,23 +73,29 @@
 
 <script setup>
 const skillCn = useSkillCn()
-const page = ref(1)
-const maxPage = computed(() => Math.ceil((data?.value?.total || 0) / formData?.value?.limit))
 const formData = ref({
-    limit: 20,
     book_id: '',
     skill: '',
     text_foreign: '',
     text_local: '',
     due_time: '',
     update_time: '',
-    offset: computed(() => (page.value - 1) * formData?.value?.limit)
+    limit: 20,
+    offset: 0
 })
+function pageChange(params) {
+    formData.value.limit = params.limit
+    formData.value.offset = params.offset
+}
 const { data, pending, refresh, error } = await useFetch('/api/card', {
-    query: formData.value,
+    query: formData,
     onResponseError({ request, response, options }) {
         useErrorDialog(response)
     }
+})
+const fullLoading = useState('fullLoading')
+watch(pending, val => {
+    fullLoading.value = val
 })
 const { data: books } = await useFetch('/api/book')
 async function batchDelete() {
