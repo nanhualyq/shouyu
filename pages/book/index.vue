@@ -1,6 +1,15 @@
 <template>
     <TheLoading v-if="pending" />
     <div v-else class="flex flex-col gap-2 flex-wrap">
+        <div class="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <a href="https://github.com/nanhualyq/shouyu-media" target="_blank">
+                社区共享的材料下载
+            </a>
+        </div>
         <div class="flex gap-2">
             <button class="flex-1 btn" @click="currentBook = {}">添加材料</button>
             <label class="flex-1 btn">
