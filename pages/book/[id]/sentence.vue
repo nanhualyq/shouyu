@@ -63,9 +63,7 @@
             <tfoot>
                 <tr>
                     <th colspan="9" class="text-center">
-                        <select class="select" v-if="pageCount > 1" v-model="currentPage">
-                            <option v-for="page in pageCount" :value="page">第{{ page }}页</option>
-                        </select>
+                        <ThePagination v-model="pageParams" :total="sentencesResult?.total" :limit="pageParams.limit" />
                         <button class="btn btn-primary ml-4" @click="handleSave">保存修改</button>
                     </th>
                 </tr>
@@ -95,22 +93,21 @@ const formData = ref({
 })
 let currentSentence = ref({})
 const mediaProps = ref({})
-const limit = 50
-const currentPage = ref(1)
+const pageParams = ref({
+    limit: 50,
+    offset: 0
+})
 const sentencesQuery = computed(() => ({
     book_id: book?.value?.id,
     lesson: formData?.value?.lesson,
-    limit,
-    offset: (currentPage.value - 1) * limit
+    limit: pageParams.value?.limit,
+    offset: pageParams.value?.offset
 }))
 const { data: sentencesResult, refresh: refreshSentences, pending } = useFetch('/api/sentence', {
     query: sentencesQuery,
     immediate: false
 })
 const sentences = computed(() => sentencesResult?.value?.data)
-const pageCount = computed(() => {
-    return Math.ceil(sentencesResult?.value?.total / 50) || 0
-})
 async function handleSave() {
     // tirgger current input sync data
     document?.activeElement?.blur()
