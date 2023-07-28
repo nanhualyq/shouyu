@@ -31,7 +31,7 @@ npm run dev
 
 访问 `http://localhost:3000`
 
-[安装教程]([wiki/安装&运行](https://github.com/nanhualyq/shouyu/wiki/%E5%AE%89%E8%A3%85&%E8%BF%90%E8%A1%8C))
+[wiki/安装&运行](https://github.com/nanhualyq/shouyu/wiki/%E5%AE%89%E8%A3%85&%E8%BF%90%E8%A1%8C)
 
 ---
 ## 创作背景
