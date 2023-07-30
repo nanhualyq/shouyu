@@ -39,12 +39,15 @@
                 第{{ current?.sentence?.lesson }}课
                 第{{ current?.sentence?.position }}句</p>
             <div class="relative group">
-                <!-- <button class="btn btn-link btn-xs link-neutral">其他操作</button> -->
-                <!-- <ul class="group-hover:block absolute right-5 bottom-5 bg-gray-100 border shadow p-2 rounded w-max hidden"> -->
-                <!-- <li> -->
-                <button @click="handleDelete" class="btn btn-link link-error">删除</button>
-                <!-- </li> -->
-                <!-- </ul> -->
+                <button class="btn btn-link btn-xs link-neutral">其他操作</button>
+                <ul class="group-hover:block absolute right-5 bottom-5 bg-gray-100 border shadow p-2 rounded w-max hidden">
+                    <li>
+                        <button @click="editFormData = current?.sentence" class="btn btn-link">修改内容</button>
+                    </li>
+                    <li>
+                        <button @click="handleDelete" class="btn btn-link link-error">删除</button>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="buttons flex">
@@ -56,6 +59,7 @@
             <button v-else @click="showAnswer" class="btn btn-primary">显示答案</button>
         </div>
     </div>
+    <SentenceEditor :sentence="editFormData" @close="closeSentenceDialog" @change="onSentenceChange" />
 </template>
 
 <script setup>
@@ -276,6 +280,14 @@ const backTextHtml = computed(() => {
     str += text?.slice(end).join('')
     return str
 })
+const editFormData = ref()
+function closeSentenceDialog() {
+    editFormData.value = null
+}
+function onSentenceChange(data) {
+    current.value.sentence = data
+    closeSentenceDialog()
+}
 </script>
 
 <style scoped lang="postcss">
