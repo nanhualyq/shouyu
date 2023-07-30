@@ -1,7 +1,9 @@
 <template>
     <div class="flex gap-4 flex-col">
         <h2>文档</h2>
-        <p>待补充</p>
+        <p>
+            <a target="_blank" href="https://github.com/nanhualyq/shouyu/wiki">Github Wiki</a>
+        </p>
         
         <h2>咨询</h2>
         <p>Email: nanhualyq@gmail.com</p>
