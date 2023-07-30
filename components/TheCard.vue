@@ -272,9 +272,10 @@ const backTextHtml = computed(() => {
     str += text?.slice(0, start).join('')
     let clozeText = text?.slice(start, end)?.join('')
     if (!isFlip.value) {
-        const words = clozeText?.match(/\S+(?:\s+)?/gu)?.length
-        clozeText = words > 1 ? `${words} words` : '...'
-        clozeText = `[${clozeText}]`
+        // const words = clozeText?.match(/\S+(?:\s+)?/gu)?.length
+        // clozeText = words > 1 ? `${words} words` : '...'
+        // clozeText = `[${clozeText}]`
+        clozeText = `[...]`
     }
     str += `<mark>${clozeText}</mark>`
     str += text?.slice(end).join('')
