@@ -45,6 +45,9 @@
                         <button @click="editFormData = current?.sentence" class="btn btn-link">修改内容</button>
                     </li>
                     <li>
+                        <button onclick="card_shortcut_dialog.showModal()" class="btn btn-link">快捷键</button>
+                    </li>
+                    <li>
                         <button @click="handleDelete" class="btn btn-link link-error">删除</button>
                     </li>
                 </ul>
@@ -60,6 +63,20 @@
         </div>
     </div>
     <SentenceEditor :sentence="editFormData" @close="closeSentenceDialog" @change="onSentenceChange" />
+    <dialog id="card_shortcut_dialog" class="modal">
+        <form method="dialog" class="modal-box">
+            <h3 class="font-bold text-lg">键盘快捷键</h3>
+            <div class="leading-10">
+                <p> <kbd class="kbd">Space</kbd> 显示答案 </p>
+                <p v-for="(v, i) in times"> <kbd class="kbd">{{i+1}}</kbd> {{v.label}} </p>
+                <p> <kbd class="kbd">Delete</kbd> 删除卡片 </p>
+                <p> <kbd class="kbd">R</kbd> 重播音频 </p>
+            </div>
+        </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </template>
 
 <script setup>

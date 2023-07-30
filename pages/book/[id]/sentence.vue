@@ -12,7 +12,8 @@
         </ul>
     </div>
     <div class="flex gap-2">
-        <button class="btn btn-secondary" @click="addRow">+新增一句</button>
+        <button class="btn btn-primary" @click="addRow">+新增一句</button>
+        <button class="btn btn-primary btn-link" onclick="sentence_shortcut_dialog.showModal()">快捷键</button>
         <select class="select select-bordered" v-model="formData.lesson">
             <option disabled selected :value="null">选择课程</option>
             <option v-for="lesson in lessons" :value="lesson.lesson">
@@ -69,20 +70,76 @@
                 </tr>
             </tfoot>
         </table>
-        <Teleport to="body">
-            <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
-                v-if="isMediaField" :style="editorPosition">
-                <TheMedia ref="mediaRef" :sentence="mediaProps" />
-                <div class="btn-group w-full flex gap-1 mt-2">
-                    <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
-                    <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
-                    <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
-                    <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
-                    <button class="btn" @click="syncMediaProps">重试</button>
-                </div>
-            </div>
-        </Teleport>
     </div>
+    <Teleport to="body">
+        <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
+            v-if="isMediaField" :style="editorPosition">
+            <TheMedia ref="mediaRef" :sentence="mediaProps" />
+            <div class="btn-group w-full flex gap-1 mt-2">
+                <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
+                <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
+                <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
+                <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
+                <button class="btn" @click="syncMediaProps">重试</button>
+            </div>
+        </div>
+    </Teleport>
+    <dialog id="sentence_shortcut_dialog" class="modal">
+        <form method="dialog" class="modal-box">
+            <h3 class="font-bold text-lg">键盘快捷键</h3>
+            <div class="leading-10">
+                <p>
+                    <kbd class="kbd">Ctrl</kbd>
+                    +
+                    <kbd class="kbd">Enter</kbd>
+                    保存修改
+                </p>
+                <p>
+                    <kbd class="kbd">Ctrl</kbd>
+                    +
+                    <kbd class="kbd">◀︎</kbd>
+                    时间-0.1
+                </p>
+                <p>
+                    <kbd class="kbd">Ctrl</kbd>
+                    +
+                    <kbd class="kbd">▶︎</kbd>
+                    时间+0.1
+                </p>
+                <p>
+                    <kbd class="kbd">Ctrl</kbd>
+                    +
+                    <kbd class="kbd">Shift</kbd>
+                    +
+                    <kbd class="kbd">◀︎</kbd>
+                    时间-1
+                </p>
+                <p>
+                    <kbd class="kbd">Ctrl</kbd>
+                    +
+                    <kbd class="kbd">Shift</kbd>
+                    +
+                    <kbd class="kbd">▶︎</kbd>
+                    时间+1
+                </p>
+                <p>
+                    <kbd class="kbd">▲</kbd>
+                    聚焦到上一行
+                </p>
+                <p>
+                    <kbd class="kbd">▼</kbd>
+                    聚焦到下一行
+                </p>
+                <p>
+                    <kbd class="kbd">R</kbd>
+                    重播音频
+                </p>
+            </div>
+        </form>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </template>
 <script setup>
 const { params: { id } } = useRoute()
