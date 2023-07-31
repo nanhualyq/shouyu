@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@nuxt/devtools": "^0.7.2",
     "@nuxtjs/tailwindcss": "^6.7.0",
     "@types/better-sqlite3": "^7.6.4",
     "@types/fluent-ffmpeg": "^2.1.21",
