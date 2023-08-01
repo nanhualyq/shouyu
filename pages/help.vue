@@ -11,7 +11,7 @@
             <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256467999-89fe3722-ee40-4898-aaaa-f16574ac4a9d.png" alt="微信号：shouxiaoyu2023">
         </p>
         
-        <h2>捐助</h2>
+        <h2>捐赠</h2>
         <p class="text-secondary">
             多少都是鼓励，大小都是帮助，随意就好。
             <br>

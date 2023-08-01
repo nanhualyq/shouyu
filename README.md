@@ -55,7 +55,7 @@ Email: `nanhualyq@gmail.com`
 </details>
 
 ---
-## 捐助
+## 捐赠
 
 多少都是鼓励，大小都是帮助，随意就好。
 
