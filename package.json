@@ -1,5 +1,8 @@
 {
-  "name": "nuxt-app",
+  "name": "shouyu",
+  "version": "0.0.1",
+  "description": "like anki",
+  "author": "nanhualyq@gmail.com",
   "private": true,
   "scripts": {
     "build": "nuxt build",
