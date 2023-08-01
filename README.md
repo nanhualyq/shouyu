@@ -11,6 +11,8 @@
 <!-- demo video -->
 https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce
 
+[文档/Wiki](https://github.com/nanhualyq/shouyu/wiki)
+
 ---
 ## 如何开始
 
@@ -31,7 +33,7 @@ npm run dev
 
 访问 `http://localhost:3000`
 
-[wiki/安装&运行](https://github.com/nanhualyq/shouyu/wiki/%E5%AE%89%E8%A3%85&%E8%BF%90%E8%A1%8C)
+[安装&运行](https://github.com/nanhualyq/shouyu/wiki/%E5%AE%89%E8%A3%85&%E8%BF%90%E8%A1%8C)
 
 ---
 ## 创作背景
