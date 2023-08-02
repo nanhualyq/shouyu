@@ -164,7 +164,7 @@ function calcFirstTime(day) {
     } else if (day === 1) {
         return '5m'
     } else {
-        return '1d'
+        return '10m'
     }
 }
 function parseTime(str) {
