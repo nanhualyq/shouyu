@@ -1,5 +1,3 @@
-import db from "~/db";
-
 function queryNextCard(where: string, order: string) {
     const sql = `SELECT *, count(*) as total FROM (
         SELECT * FROM card 

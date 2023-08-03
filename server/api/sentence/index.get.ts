@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(event => {
     const query = getQuery(event)
     let where = Object.entries(query)

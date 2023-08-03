@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     const bookIdSql = `select book_id from card 
     left join sentence on (card.sentence_id = sentence.id)

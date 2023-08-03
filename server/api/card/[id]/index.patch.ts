@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     const body = await readBody(event)
     const { id } = getRouterParams(event)

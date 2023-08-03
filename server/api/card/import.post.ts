@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     const { book_id, lessons, position, skills } = await readBody(event)
 
