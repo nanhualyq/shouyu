@@ -21,11 +21,6 @@ https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f3
 npm install
 ```
 
-初始化数据库
-```js
-node db/migration.js
-```
-
 运行开发服务器
 ```js
 npm run dev
