@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     return db.prepare(`SELECT 
             count(id) as count, 

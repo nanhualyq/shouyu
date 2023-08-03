@@ -1,6 +1,3 @@
-import { Statement } from "better-sqlite3";
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     const body = await readBody(event)
     let arr = body

@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     const query = getQuery(event)
     if (!query.limit) {

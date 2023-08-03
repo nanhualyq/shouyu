@@ -1,4 +1,3 @@
-import db from "~/db";
 import { sendStream } from 'h3'
 import fs from "fs";
 

@@ -1,5 +1,3 @@
-import db from "~/db";
-
 export default defineEventHandler(async event => {
     const body = await readBody(event)
     // 新建的填空卡片不当作新卡用
