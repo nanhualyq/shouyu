@@ -11,8 +11,10 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
-      - name: base
+      - name: code
       - uses: actions/checkout@v3
+
+      - name: node
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
