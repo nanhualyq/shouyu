@@ -3,15 +3,22 @@
   "version": "0.0.1",
   "description": "like anki",
   "author": "nanhualyq@gmail.com",
+  "main": "electron/main.js",
+  "homepage": "https://github.com/nanhualyq/shouyu",
   "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "electron:rebuild": "electron-rebuild -t prod,dev",
+    "electron:build": "electron-builder build",
+    "electron:prebuild": "npm run electron:rebuild && npm run build",
+    "electron": "npm run electron:prebuild && npm run electron:build"
   },
   "devDependencies": {
+    "@electron/rebuild": "^3.2.13",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@nuxt/devtools": "^0.7.2",
     "@nuxtjs/tailwindcss": "^6.7.0",
@@ -20,7 +27,24 @@
     "@types/node": "^18",
     "better-sqlite3": "^8.4.0",
     "daisyui": "^3.3.1",
+    "electron": "^25.3.2",
+    "electron-builder": "^24.6.3",
     "fluent-ffmpeg": "^2.1.2",
     "nuxt": "^3.4.0"
+  },
+  "build": {
+    "asar": false,
+    "files": [
+      ".output/**/*",
+      "electron",
+      "sql"
+    ],
+    "includeSubNodeModules": true,
+    "linux": {
+      "target": "AppImage"
+    },
+    "win": {
+      "target": "portable"
+    }
   }
 }
