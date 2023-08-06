@@ -184,11 +184,11 @@ async function handleSave() {
 onBeforeRouteLeave(() => {
     sentences.value = []
 })
-function handleBatchUrl() {
-    const val = prompt('新的url')
-    if (val === null) {
-        return
-    }
+async function handleBatchUrl() {
+    const val = await myPrompt('新的url')
+        if (!val) {
+            return
+        }
     for (const row of sentences.value) {
         row.media_url = val
     }
@@ -335,8 +335,8 @@ async function addRow() {
     let lessonInputed = false
     if (body.lesson == null) {
         const maxLesson = lessons.value?.[lessons.value?.length - 1]?.lesson || 0
-        let val = prompt('没有选择课程，请自行填入', maxLesson + 1)
-        if (val === null) {
+        const val = await myPrompt('没有选择课程，请自行填入', maxLesson + 1)
+        if (!val) {
             return
         }
         body.lesson = +val
