@@ -29,7 +29,7 @@ const env = {
 }
 
 if (!env.NITRO_PORT) {
-    env.NITRO_PORT = 3000
+    env.NITRO_PORT = 3456
 }
 if (!env.NUXT_SQLITE_FILE) {
     env.NUXT_SQLITE_FILE = `${dbDir}/data.db`
@@ -59,7 +59,9 @@ ps.stdout.on('data', (data) => {
 ps.stderr.on('data', data => {
     const val = data.toString()
     console.error(val);
-    new Notification({ body: val }).show()
+    if (val.includes('Error: listen EADDRINUSE: address already in use')) {
+        new Notification({ body: val }).show()
+    }
 })
 
 app.on('will-quit', () => {
