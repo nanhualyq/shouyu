@@ -28,8 +28,6 @@ npm run dev
 
 访问 `http://localhost:3000`
 
-[安装&运行](https://github.com/nanhualyq/shouyu/wiki/%E5%AE%89%E8%A3%85&%E8%BF%90%E8%A1%8C)
-
 ---
 ## 创作背景
 过去几年我都在用 `Anki` 学新概念英语和赖世雄美语，为了练习听力和口语，需要将每一句对白的音频用 `Audacity` 剪辑出来，才能在 `Anki` 卡片上播放。
