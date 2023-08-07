@@ -1,9 +1,6 @@
 name: Electron/release
 
 on:
-  push:
-    branches:
-      - main
   create:
     tags:
       - v*
