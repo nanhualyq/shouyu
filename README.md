@@ -9,8 +9,14 @@
 - 更少遗忘：类似Anki定期主动回忆测试，还支持在线编辑音频时间位置，练习听力、口语更方便
 
 <!-- demo video -->
-<!-- https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce -->
-<video src="https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce" controls />
+
+<!-- for github -->
+https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce
+
+<!-- for gitee -->
+<video controls>
+ <source src="https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce" type="video/mp4" />
+</video>
 
 [文档/Wiki](./wiki)
 
