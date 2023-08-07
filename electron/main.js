@@ -1,3 +1,6 @@
+// 图标生成
+// npx electron-icon-builder --input=public/big.png --output=build --flatten
+
 const { app, BrowserWindow, Notification } = require('electron')
 const { fork } = require('child_process')
 const fs = require('fs')
