@@ -9,12 +9,30 @@
 - 更少遗忘：类似Anki定期主动回忆测试，还支持在线编辑音频时间位置，练习听力、口语更方便
 
 <!-- demo video -->
-https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce
+<!-- https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce -->
+<video src="https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce" controls />
 
-[文档/Wiki](https://github.com/nanhualyq/shouyu/wiki)
+[文档/Wiki](./wiki)
+
+---
+## 学习原理
+在[Anki简介](http://www.ankichina.net/manual/anki/)中，列出了如下3点：
+- 主动回忆测试
+- 用进废退原则
+- 间隔重复
+目的是为了记得更牢，遗忘更少，本工具就是采用类似的方法，也是一种致敬吧。
 
 ---
 ## 如何开始
+
+- 普通用户
+
+[下载](./releases)后运行即可。
+
+（windows可能有安全风险未知的提示，介意的不要打开使用，因为目前上线推出比较仓促，还来不及完善打包所需的证书等材料）
+
+
+- 开发者
 
 安装依赖
 ```js
