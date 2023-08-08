@@ -22,18 +22,15 @@
                 :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position + 1 }"
                 label="查看下一句" :field="frontField" />
         </div>
+
         <div class="divider" v-if="isFlip || isCloze"></div>
+
         <!-- back -->
-        <div class="flex-1 p-2" v-if="isFlip || isCloze">
-            <TheMedia ref="mediaRef" v-if="currentSkill === 'speak'" :sentence="current?.sentence" />
-            <span id="back-text" v-else class="text-primary" v-html="backTextHtml">
-            </span>
-            <div class="mt-4">
-                <button v-show="needCloze" @click="submitCloze" class="btn btn-primary btn-wide">添加填空卡片</button>
-            </div>
-        </div>
+        <CardBack class="flex-1 p-2" v-if="isFlip || isCloze" :current="current" :isFlip="isFlip" />
+
+        <!-- status bar -->
         <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center items-center">
-            <p>{{ current?.$?.total }}</p>
+            <p class="text-primary">{{ current?.$?.total }}</p>
             <p>{{ skillCn[currentSkill] }}</p>
             <p>《{{ book?.name }}》
                 第{{ current?.sentence?.lesson }}课
@@ -53,6 +50,7 @@
                 </ul>
             </div>
         </div>
+
         <div class="buttons flex">
             <template v-if="isFlip">
                 <button v-for="(item, index) in times" @click="submitCard(index)" class="btn" :class="item.color">
@@ -62,7 +60,9 @@
             <button v-else @click="showAnswer" class="btn btn-primary">显示答案</button>
         </div>
     </div>
+    
     <SentenceEditor :sentence="editFormData" @close="closeSentenceDialog" @change="onSentenceChange" />
+    
     <dialog id="card_shortcut_dialog" class="modal">
         <form method="dialog" class="modal-box">
             <h3 class="font-bold text-lg">键盘快捷键</h3>
@@ -208,11 +208,9 @@ function replayMedia() {
 }
 onMounted(() => {
     window.addEventListener('keyup', handleKeyup)
-    document.addEventListener('selectionchange', handleSelection)
 })
 onUnmounted(() => {
     window.removeEventListener('keyup', handleKeyup)
-    document.removeEventListener('selectionchange', handleSelection)
 })
 function handleKeyup(e) {
     switch (e.code) {
@@ -237,71 +235,7 @@ function handleKeyup(e) {
             break;
     }
 }
-const needCloze = ref(false)
-function handleSelection() {
-    if (isCloze.value) {
-        return
-    }
-    needCloze.value = false
-    const { anchorNode, anchorOffset, focusNode, focusOffset } = getSelection()
-    if (anchorNode !== focusNode) {
-        return
-    }
-    if (!anchorNode?.parentNode?.closest('#back-text')) {
-        return
-    }
-    if (anchorOffset === focusOffset) {
-        return
-    }
-    needCloze.value = true
-}
-async function submitCloze() {
-    const { sentence_id, skill } = current?.value?.card || {}
-    const { anchorOffset, focusOffset } = getSelection()
-    const cloze = [anchorOffset, focusOffset]?.sort((a, b) => a - b)?.join(',')
-    const body = {
-        sentence_id,
-        skill,
-        cloze
-    }
-    const { data } = await fetchWrapper(useFetch('/api/card', {
-        method: 'post',
-        body
-    }))
-    const { changes } = data.value || {}
-    if (changes === 1) {
-        getSelection()?.removeAllRanges()
-        addToast('添加成功')
-    } else if (changes === 0) {
-        addToast('添加失败，重复数据', 'warning')
-    }
-}
 const isCloze = computed(() => !!current?.value?.card?.cloze)
-const backTextHtml = computed(() => {
-    const isRead = currentSkill.value === 'read'
-    let text = current?.value?.sentence?.[isRead ? 'text_local' : 'text_foreign']
-    const cloze = current?.value?.card?.cloze
-    if (!cloze) {
-        return text
-    }
-    if (!/^\d+,\d+$/.test(cloze)) {
-        return `cloze error: ${cloze}`
-    }
-    text = [...text]
-    const [start, end] = cloze?.split(',')
-    let str = ''
-    str += text?.slice(0, start).join('')
-    let clozeText = text?.slice(start, end)?.join('')
-    if (!isFlip.value) {
-        // const words = clozeText?.match(/\S+(?:\s+)?/gu)?.length
-        // clozeText = words > 1 ? `${words} words` : '...'
-        // clozeText = `[${clozeText}]`
-        clozeText = `[...]`
-    }
-    str += `<mark>${clozeText}</mark>`
-    str += text?.slice(end).join('')
-    return str
-})
 const editFormData = ref()
 function openSentenceDialog() {
     editFormData.value = current.value?.sentence
