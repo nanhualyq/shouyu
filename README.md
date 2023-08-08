@@ -36,8 +36,9 @@ https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f3
 [从Gitee下载](https://gitee.com/shouxiaoyu/shouyu/releases)
 后运行即可。
 
-（windows可能有安全风险未知的提示，介意的不要打开使用，因为目前上线推出比较仓促，还来不及完善打包所需的证书等材料）
-
+> [!WARNING]
+> Windows 或 macOS 可能有安全风险未知的提示，介意的或者担心的不要运行，换成下面的方式也一样能用。
+> 因为这个代码签名需要付费购买证书，但我只是一个小小的免费工具而已，并不是什么能盈利的商业软件，请多包含。
 
 - 开发者
 

@@ -67,6 +67,13 @@ ps.stderr.on('data', data => {
     }
 })
 
+// fix: basic auth prompt dialog not working
+app.on('login', (event, webContents, request, authInfo, callback) => {
+    event.preventDefault();
+    const [user, pass] = env?.NUXT_BASIC_AUTH.split('\n')?.[0]?.split(':')
+    callback(user, pass)
+  });
+
 app.on('will-quit', () => {
     ps.kill()
 })

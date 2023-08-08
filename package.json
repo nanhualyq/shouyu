@@ -1,6 +1,6 @@
 {
   "name": "shouyu",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "like anki",
   "author": "nanhualyq@gmail.com",
   "main": "electron/main.js",
@@ -45,6 +45,9 @@
     },
     "win": {
       "target": "portable"
+    },
+    "mac": {
+      "target": "default"
     }
   }
 }
