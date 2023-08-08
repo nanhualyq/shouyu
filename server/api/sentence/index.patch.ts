@@ -1,19 +1,4 @@
 export default defineEventHandler(async event => {
-    const body = await readBody(event)
-    let arr = body
-    if (!Array.isArray(body)) {
-        arr = [body]
-    }
-    await db.transaction(() => {
-        for (const row of arr) {
-            const set = Object.keys(row)
-            ?.filter(key => key !== 'id')
-            .map(key => `${key}=@${key}`)
-            .join(',')
-            db.prepare(`UPDATE sentence SET ${set}
-        WHERE id=@id`)
-                .run(row)
-        }
-    })()
+    await batchPatch(event, 'sentence')
     return 200
 })
