@@ -13,7 +13,7 @@
 <!-- for github -->
 https://github.com/xitu/profile-card/assets/6212850/69a1b0ca-1df7-4ba4-af60-63f37ee943ce
 <!-- for gitee -->
-（如视频播放器未显示，请点击上面的链接观看Demo）
+（如视频播放器未显示，请[移步B站](https://www.bilibili.com/video/BV1cV4y1v751/)观看Demo）
 
 [文档/Wiki on Github](https://github.com/nanhualyq/shouyu/wiki) | 
 [文档/Wiki on Gitee](https://gitee.com/shouxiaoyu/shouyu/wikis) (github打不开的用这个)
