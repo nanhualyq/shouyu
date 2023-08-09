@@ -72,16 +72,16 @@
         </table>
     </div>
     <Teleport to="body">
-        <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl text-center"
-            v-if="isMediaField" :style="editorPosition">
-            <TheMedia ref="mediaRef" :sentence="mediaProps" />
+        <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl flex flex-col gap-2"
+            v-show="isMediaField" :style="editorPosition">
+            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" />
             <div class="btn-group w-full flex gap-1 mt-2">
                 <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                 <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
                 <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
                 <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
-                <button class="btn" @click="syncMediaProps">重试</button>
             </div>
+            <button class="btn btn-primary btn-block btn-sm" @click="syncMediaProps">试播</button>
         </div>
     </Teleport>
     <dialog id="sentence_shortcut_dialog" class="modal">
@@ -124,15 +124,17 @@
                 </p>
                 <p>
                     <kbd class="kbd">▲</kbd>
-                    聚焦到上一行
+                    光标移到上一行
                 </p>
                 <p>
                     <kbd class="kbd">▼</kbd>
-                    聚焦到下一行
+                    光标移到下一行
                 </p>
                 <p>
+                    <kbd class="kbd">Alt</kbd>
+                    +
                     <kbd class="kbd">R</kbd>
-                    重播音频
+                    试播/重播
                 </p>
             </div>
         </form>
@@ -166,8 +168,7 @@ const { data: sentencesResult, refresh: refreshSentences, pending } = useFetch('
 })
 const sentences = computed(() => sentencesResult?.value?.data)
 async function handleSave() {
-    // tirgger current input sync data
-    document?.activeElement?.blur()
+    syncTdData(focusTd.value)
 
     const { error } = await fetchWrapper(
         useFetch('/api/sentence', {
@@ -198,6 +199,9 @@ const focusTd = ref(null)
 const focusField = computed(() => focusTd.value?.dataset?.field)
 const isMediaField = computed(() => ['media_start', 'media_end'].includes(focusField.value))
 const editorPosition = computed(() => {
+    if (!isMediaField.value) {
+        return
+    }
     const { bottom, top } = focusTd.value?.getBoundingClientRect()
     if (bottom > document.body.clientHeight / 2) {
         return {
@@ -240,14 +244,16 @@ function handleFocusTr(e, sentence) {
     e.target.id = 'focus-td'
     focusTd.value = e.target
     currentSentence.value = sentence
-    syncMediaProps()
 }
 function handleBlurTr(e) {
     if (!e.target.tagName === 'TD') {
         return
     }
+    syncTdData(e.target)
+}
+function syncTdData(td) {
     if (focusField.value) {
-        currentSentence.value[focusField.value] = e.target?.textContent
+        currentSentence.value[focusField.value] = td?.textContent
     }
 }
 function replay() {
@@ -255,6 +261,7 @@ function replay() {
     syncMediaProps()
 }
 function syncMediaProps() {
+    syncTdData(focusTd.value)
     const { media_url, media_start, media_end } = currentSentence.value || {}
     mediaProps.value = {
         media_url, media_start, media_end
@@ -284,6 +291,7 @@ function seconds2Time(seconds) {
     return arr.join(':') + decimal
 }
 function handleMediaTime(offset) {
+    syncTdData(focusTd.value)
     let val = currentSentence.value[focusField.value]
     const { h, m, s } = String(val || '')
         ?.match(/^(?:(?:(?<h>\d{2}):)?(?<m>\d{2}):)?(?<s>\d{2}(?:\.\d+)?)$/)
@@ -396,6 +404,13 @@ function resetPosition() {
             refreshSentences()
         })
 }
+watch(currentSentence, () => {
+    mediaProps.value = {}
+})
+const showMedia = computed(() => {
+    const vals = Object.values(mediaProps.value)
+    return vals.length && vals.every(Boolean)
+})
 </script>
 <style scoped lang="postcss">
 #focus-td {
