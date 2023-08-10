@@ -7,13 +7,18 @@
         </svg>
         <span>{{ paramsError }}</span>
     </div>
-    <component :is="mediaTag" v-else ref="mediaRef" :class="{ loading: pending }" :src="mediaUrl" controls autoplay
-        @loadstart="onStart" @canplaythrough="pending = false" @error="onError" />
+    <component :is="mediaTag" v-else ref="mediaRef" :class="{ loading: pending }" :src="mediaUrl" controls
+        :autoplay="autoplay" @loadstart="onStart" @canplay="pending = false" @error="onError"
+        @canplaythrough="onCanplaythrough" />
     <p v-if="loadError" class="text-error">{{ loadError }}</p>
 </template>
 <script setup>
 const props = defineProps({
-    sentence: Object
+    sentence: Object,
+    autoplay: {
+        type: Boolean,
+        default: true
+    }
 })
 const sentence = toRef(props, 'sentence')
 const mediaTag = computed(() => {
@@ -44,12 +49,42 @@ function onError(e) {
     loadError.value = mediaRef?.value?.error?.message
     pending.value = false
 }
+function onCanplaythrough(e) {
+    if (nextPlayFn) {
+        nextPlayFn()
+    }
+}
 const mediaRef = ref(null)
 function replay() {
-    mediaRef?.value?.play()
+    const node = mediaRef?.value
+    if (!node?.duration) {
+        return
+    }
+    if (node?.currentTime > 0) {
+        node.currentTime = 0
+    }
+    node?.play()
+}
+let nextPlayFn = null
+function playStartOf(start) {
+    const node = mediaRef?.value
+    nextPlayFn = function () {
+        if (!start) {
+            replay()
+        } else {
+            const startTime = (start < 0 ? node.duration : node.currentTime) + start
+            node.currentTime = Math.max(0, startTime)
+            node?.play()
+        }
+        nextPlayFn = null
+    }
+    if (node.duration) {
+        nextPlayFn()
+    }
 }
 
 defineExpose({
-    replay
+    replay,
+    playStartOf
 })
 </script>
