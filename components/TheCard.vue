@@ -213,6 +213,9 @@ onUnmounted(() => {
     window.removeEventListener('keyup', handleKeyup)
 })
 function handleKeyup(e) {
+    if (editFormData.value) {
+        return
+    }
     switch (e.code) {
         case 'Space':
             showAnswer()
