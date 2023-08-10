@@ -200,14 +200,17 @@ async function handleSave() {
 onBeforeRouteLeave(() => {
     sentences.value = []
 })
-async function handleBatchUrl() {
-    const val = await myPrompt('新的url')
-    if (!val) {
-        return
-    }
-    for (const row of sentences.value) {
-        row.media_url = val
-    }
+function handleBatchUrl() {
+    ElMessageBox.prompt('', '请输入新的url')
+        .then(({ value }) => {
+            if (!value) {
+                return
+            }
+            for (const row of sentences.value) {
+                row.media_url = value
+            }
+        })
+        .catch(() => { })
 }
 const mediaRef = ref(null)
 const focusTd = ref(null)
@@ -369,11 +372,13 @@ async function addRow() {
     let lessonInputed = false
     if (body.lesson == null) {
         const maxLesson = lessons.value?.[lessons.value?.length - 1]?.lesson || 0
-        const val = await myPrompt('没有选择课程，请自行填入', maxLesson + 1)
-        if (!val) {
+        const res = await ElMessageBox.prompt('没有选择课程，请自行填入', '第几课',
+            { inputValue: maxLesson + 1 })
+            .catch(() => { })
+        if (!res?.value) {
             return
         }
-        body.lesson = +val
+        body.lesson = +res.value
         lessonInputed = true
     }
     body.position = (sentences.value?.[sentences.value?.length - 1]?.position || 0) + 1
