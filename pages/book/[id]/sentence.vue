@@ -25,7 +25,7 @@
         <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
             @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
             @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay">
+            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay" @keydown.r.ctrl.alt.exact="replayEnd">
             <thead>
                 <tr>
                     <th></th>
@@ -73,15 +73,18 @@
     </div>
     <Teleport to="body">
         <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl flex flex-col gap-2"
-            v-show="isMediaField" :style="editorPosition">
-            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" />
-            <div class="btn-group w-full flex gap-1 mt-2">
+            v-if="isMediaField" :style="editorPosition">
+            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" :autoplay="false" />
+            <div class="btn-group flex gap-1 mt-2">
                 <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                 <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
                 <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
                 <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
             </div>
-            <button class="btn btn-primary btn-block btn-sm" @click="syncMediaProps">试播</button>
+            <div class="btn-group flex gap-1 mt-2">
+                <button class="btn flex-1" @click="replay">从头试播</button>
+                <button class="btn flex-1" @click="replayEnd">试播末尾</button>
+            </div>
         </div>
     </Teleport>
     <dialog id="sentence_shortcut_dialog" class="modal">
@@ -134,7 +137,15 @@
                     <kbd class="kbd">Alt</kbd>
                     +
                     <kbd class="kbd">R</kbd>
-                    试播/重播
+                    从头试播
+                </p>
+                <p>
+                    <kbd class="kbd">Ctrl</kbd>
+                    +
+                    <kbd class="kbd">Alt</kbd>
+                    +
+                    <kbd class="kbd">R</kbd>
+                    试播末尾
                 </p>
             </div>
         </form>
@@ -187,9 +198,9 @@ onBeforeRouteLeave(() => {
 })
 async function handleBatchUrl() {
     const val = await myPrompt('新的url')
-        if (!val) {
-            return
-        }
+    if (!val) {
+        return
+    }
     for (const row of sentences.value) {
         row.media_url = val
     }
@@ -257,8 +268,16 @@ function syncTdData(td) {
     }
 }
 function replay() {
-    mediaRef?.value?.replay()
     syncMediaProps()
+    nextTick(() => {
+        mediaRef?.value?.playStartOf()
+    })
+}
+function replayEnd() {
+    syncMediaProps()
+    nextTick(() => {
+        mediaRef?.value?.playStartOf(-3)
+    })
 }
 function syncMediaProps() {
     syncTdData(focusTd.value)
