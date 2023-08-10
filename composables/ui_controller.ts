@@ -3,7 +3,12 @@ export const useErrorDialog = (error:any) => {
     useState('TheErrorDialogMessage').value = message
     const dialog = document.getElementById('the_error_dialog') as HTMLDialogElement
     if (dialog.open) {
-        addToast(message, 'error')
+        ElNotification({
+            title: '错误',
+            message,
+            type: 'error',
+            duration: 10 * 1000
+        })
     } else {
         dialog?.showModal()
     }

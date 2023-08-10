@@ -8,11 +8,12 @@
     <Meta name="msapplication-TileColor" content="#da532c" />
     <Meta name="theme-color" content="#ffffff" />
   </Head>
+
   <NuxtLayout>
     <NuxtLoadingIndicator /> <!-- here -->
     <NuxtPage />
   </NuxtLayout>
-  <TheToast />
+  
   <TheErrorDialog />
   <TheLoading class="full" v-show="showFullLoading" />
   <ThePrompt />

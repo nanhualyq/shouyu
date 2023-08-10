@@ -25,7 +25,8 @@
         <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
             @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
             @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay" @keydown.r.ctrl.alt.exact="replayEnd">
+            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay"
+            @keydown.r.ctrl.alt.exact="replayEnd">
             <thead>
                 <tr>
                     <th></th>
@@ -189,7 +190,10 @@ async function handleSave() {
         })
     )
     if (!error.value) {
-        addToast('已保存')
+        ElNotification({
+            title: '保存成功',
+            type: 'success',
+        })
         refreshSentences()
     }
 }
@@ -349,7 +353,10 @@ async function delRow() {
         })
     )
     if (!error.value) {
-        addToast('删除成功')
+        ElNotification({
+            title: '删除成功',
+            type: 'success',
+        })
         refreshSentences()
     }
 }
@@ -379,7 +386,10 @@ async function addRow() {
         })
     )
     if (!error.value) {
-        addToast('添加成功')
+        ElNotification({
+            title: '添加成功',
+            type: 'success',
+        })
         if (lessonInputed) {
             await refreshLessons()
             formData.value.lesson = body.lesson
@@ -405,7 +415,11 @@ async function importSentence(e, row) {
             body
         })
     )
-    addToast(`成功：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`)
+    ElNotification({
+        title: '成功',
+        message: `生成：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`,
+        type: 'success',
+    })
     e.target.value = e.target.options[0].value
 }
 function resetPosition() {
@@ -419,7 +433,10 @@ function resetPosition() {
         })
     )
         .then(() => {
-            addToast('重置完成')
+            ElNotification({
+                title: '重置完成',
+                type: 'success',
+            })
             refreshSentences()
         })
 }
