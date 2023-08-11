@@ -1,5 +1,15 @@
 module.exports = {
-    plugins: [require('daisyui')],
+    plugins: [
+        require('daisyui'),
+        function ({ addBase }) {
+            addBase({
+                // fix: el-button background is white
+                ".el-button": {
+                    "background-color": "var(--el-button-bg-color,var(--el-color-white))"
+                }
+            });
+        }
+    ],
     daisyui: {
         themes: [
             // "light",
