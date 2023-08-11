@@ -6,9 +6,10 @@
     <div v-else class="flex flex-col gap-2">
         <div class="flex gap-2 flex-col md:flex-row">
             <NuxtLink class="btn btn-primary flex-1" :to="reviewUrl">复习到期卡片</NuxtLink>
-            <input v-if="needAhead" v-model="aheadDate" class="input border-gray-500 flex-1"
-                placeholder="请输入截止日期如 2023-12-25" />
-            <button v-else class="btn" @click="needAhead = true">提前复习</button>
+            <div class="relative">
+                <el-date-picker ref="dateRef" v-model="aheadDate" @change="reviewFuture" type="date" value-format="YYYY-MM-DD" size="large" :disabled-date="setDateValia" />
+                <button class="btn absolute top-0 left-0 right-0 bottom-0 w-full" @click="openDate">提前复习</button>
+            </div>
         </div>
 
         <div class="overflow-x-auto" v-if="stats?.length">
@@ -52,7 +53,6 @@ const today = computed(() => stats?.value?.find(o => (new Date()).toISOString().
 function formatDate(str) {
     return str?.replace(/^\d{4}\-/, '')
 }
-const needAhead = ref(false)
 const aheadDate = ref('')
 const reviewUrl = computed(() => {
     let str = '/card/play?random=1&review=1'
@@ -61,4 +61,14 @@ const reviewUrl = computed(() => {
     }
     return str
 })
+function reviewFuture() {
+    useRouter().push(reviewUrl.value)
+}
+const dateRef = ref(null)
+function openDate() {
+    dateRef.value.focus()
+}
+function setDateValia(date) {
+    return date < new Date()
+}
 </script>
