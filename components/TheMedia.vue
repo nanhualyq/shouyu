@@ -29,7 +29,11 @@ const mediaTag = computed(() => {
 })
 const mediaUrl = computed(() => {
     const { media_url, media_start, media_end } = sentence?.value || {}
-    const search = new URLSearchParams({ media_url, media_start, media_end })
+    const search = new URLSearchParams({
+        media_url,
+        media_start: startPriority.value || media_start,
+        media_end
+    })
     return '/api/media?' + search.toString()
 })
 const paramsError = computed(() => {
@@ -47,6 +51,10 @@ function onStart() {
 }
 function onError(e) {
     loadError.value = mediaRef?.value?.error?.message
+    // fix: chrome error when exec play()
+    if (loadError.value === 'PIPELINE_ERROR_READ: FFmpegDemuxer: demuxer seek failed') {
+        mediaRef?.value?.load()
+    }
     pending.value = false
 }
 function onCanplaythrough(e) {
@@ -66,15 +74,25 @@ function replay() {
     node?.play()
 }
 let nextPlayFn = null
+const startPriority = ref()
 function playStartOf(start) {
     const node = mediaRef?.value
+    startPriority.value = null
     nextPlayFn = function () {
         if (!start) {
             replay()
         } else {
-            const startTime = (start < 0 ? node.duration : node.currentTime) + start
-            node.currentTime = Math.max(0, startTime)
-            node?.play()
+            // fix: chrome set currentTime not working
+            if (window.chrome) {
+                const { media_start, media_end } = sentence?.value || {}
+                const startTime = (start < 0 ? Number(media_end) : Number(media_start)) + start
+                startPriority.value = Math.max(media_start, startTime)
+                mediaRef?.value?.load()
+            } else {
+                const startTime = (start < 0 ? node.duration : node.currentTime) + start
+                node.currentTime = Math.max(0, startTime)
+                node?.play()
+            }
         }
         nextPlayFn = null
     }

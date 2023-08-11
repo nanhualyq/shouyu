@@ -75,7 +75,7 @@
     <Teleport to="body">
         <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl flex flex-col gap-2"
             v-if="isMediaField" :style="editorPosition">
-            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" :autoplay="false" />
+            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" />
             <div class="btn-group flex gap-1 mt-2">
                 <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                 <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
