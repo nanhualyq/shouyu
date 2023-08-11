@@ -61,7 +61,11 @@ async function submitBatch(params) {
     if (error.value) {
         useErrorDialog(error)
     } else {
-        addToast(`成功：${count.value?.changes}，跳过：${count.value?.total - count.value?.changes}`)
+        ElNotification({
+            title: '成功',
+            message: `生成：${count.value?.changes}，跳过：${count.value?.total - count.value?.changes}`,
+            type: 'success',
+        })
     }
 }
 </script>

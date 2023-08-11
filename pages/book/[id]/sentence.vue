@@ -25,7 +25,8 @@
         <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
             @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
             @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay" @keydown.r.ctrl.alt.exact="replayEnd">
+            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay"
+            @keydown.r.ctrl.alt.exact="replayEnd">
             <thead>
                 <tr>
                     <th></th>
@@ -74,7 +75,7 @@
     <Teleport to="body">
         <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl flex flex-col gap-2"
             v-if="isMediaField" :style="editorPosition">
-            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" :autoplay="false" />
+            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" />
             <div class="btn-group flex gap-1 mt-2">
                 <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
                 <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
@@ -189,21 +190,27 @@ async function handleSave() {
         })
     )
     if (!error.value) {
-        addToast('已保存')
+        ElNotification({
+            title: '保存成功',
+            type: 'success',
+        })
         refreshSentences()
     }
 }
 onBeforeRouteLeave(() => {
     sentences.value = []
 })
-async function handleBatchUrl() {
-    const val = await myPrompt('新的url')
-    if (!val) {
-        return
-    }
-    for (const row of sentences.value) {
-        row.media_url = val
-    }
+function handleBatchUrl() {
+    ElMessageBox.prompt('', '请输入新的url')
+        .then(({ value }) => {
+            if (!value) {
+                return
+            }
+            for (const row of sentences.value) {
+                row.media_url = value
+            }
+        })
+        .catch(() => { })
 }
 const mediaRef = ref(null)
 const focusTd = ref(null)
@@ -349,7 +356,10 @@ async function delRow() {
         })
     )
     if (!error.value) {
-        addToast('删除成功')
+        ElNotification({
+            title: '删除成功',
+            type: 'success',
+        })
         refreshSentences()
     }
 }
@@ -362,11 +372,13 @@ async function addRow() {
     let lessonInputed = false
     if (body.lesson == null) {
         const maxLesson = lessons.value?.[lessons.value?.length - 1]?.lesson || 0
-        const val = await myPrompt('没有选择课程，请自行填入', maxLesson + 1)
-        if (!val) {
+        const res = await ElMessageBox.prompt('没有选择课程，请自行填入', '第几课',
+            { inputValue: maxLesson + 1 })
+            .catch(() => { })
+        if (!res?.value) {
             return
         }
-        body.lesson = +val
+        body.lesson = +res.value
         lessonInputed = true
     }
     body.position = (sentences.value?.[sentences.value?.length - 1]?.position || 0) + 1
@@ -379,7 +391,10 @@ async function addRow() {
         })
     )
     if (!error.value) {
-        addToast('添加成功')
+        ElNotification({
+            title: '添加成功',
+            type: 'success',
+        })
         if (lessonInputed) {
             await refreshLessons()
             formData.value.lesson = body.lesson
@@ -405,7 +420,11 @@ async function importSentence(e, row) {
             body
         })
     )
-    addToast(`成功：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`)
+    ElNotification({
+        title: '成功',
+        message: `生成：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`,
+        type: 'success',
+    })
     e.target.value = e.target.options[0].value
 }
 function resetPosition() {
@@ -419,7 +438,10 @@ function resetPosition() {
         })
     )
         .then(() => {
-            addToast('重置完成')
+            ElNotification({
+                title: '重置完成',
+                type: 'success',
+            })
             refreshSentences()
         })
 }

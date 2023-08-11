@@ -1,7 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     modules: [
-        '@nuxtjs/tailwindcss'
+        '@nuxtjs/tailwindcss',
+        '@element-plus/nuxt'
     ],
 
     app: {
@@ -19,5 +20,7 @@ export default defineNuxtConfig({
 
     devtools: {
         enabled: true
-    }
+    },
+
+    elementPlus: { /** Options */ }
 })

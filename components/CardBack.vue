@@ -92,13 +92,20 @@ async function submitCloze() {
     }))
     const { changes } = data.value || {}
     if (changes === 1 || data.value === 200) {
-        addToast('保存成功')
+        ElNotification({
+            title: '保存成功',
+            type: 'success',
+        })
         if (clozeEditing.value) {
             current.value.card.cloze = cloze
         }
         cancelCloze()
     } else if (changes === 0) {
-        addToast('保存失败，重复数据', 'warning')
+        ElNotification({
+            title: '保存失败',
+            message: '已存在相同的填空卡片',
+            type: 'warning',
+        })
     }
 }
 function cancelCloze() {
