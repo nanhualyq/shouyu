@@ -93,9 +93,15 @@ const { data, pending, refresh, error } = await useFetch('/api/card', {
         useErrorDialog(response)
     }
 })
-const fullLoading = useState('fullLoading')
+let loading
 watch(pending, val => {
-    fullLoading.value = val
+    if (val) {
+        loading = ElLoading.service({
+            lock: true,
+        })
+    } else {
+        loading && loading.close()
+    }
 })
 const { data: books } = await useFetch('/api/book')
 async function batchDelete() {

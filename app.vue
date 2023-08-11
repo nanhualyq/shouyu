@@ -13,12 +13,9 @@
     <NuxtLoadingIndicator />
     <NuxtPage />
   </NuxtLayout>
-
-  <TheLoading class="full" v-show="showFullLoading" />
 </template>
 
 <script setup>
-const showFullLoading = useState('fullLoading', () => ref(false))
 useHead({
   htmlAttrs: {
     'data-theme': "corporate"
