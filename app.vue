@@ -14,7 +14,6 @@
     <NuxtPage />
   </NuxtLayout>
 
-  <TheErrorDialog />
   <TheLoading class="full" v-show="showFullLoading" />
 </template>
 

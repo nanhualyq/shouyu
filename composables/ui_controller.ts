@@ -1,8 +1,7 @@
-export const useErrorDialog = (error:any) => {
+export const useErrorDialog = (error: any) => {
     const message = error?.value?.data?.message || error?._data?.message
-    useState('TheErrorDialogMessage').value = message
-    const dialog = document.getElementById('the_error_dialog') as HTMLDialogElement
-    if (dialog.open) {
+    // TODO: other <dialog> change to ElementPlus's Modal
+    if (1) {
         ElNotification({
             title: '错误',
             message,
@@ -10,6 +9,11 @@ export const useErrorDialog = (error:any) => {
             duration: 10 * 1000
         })
     } else {
-        dialog?.showModal()
+        ElMessageBox.alert(message, 'Error', {
+            confirmButtonText: 'OK',
+            type: 'error',
+            center: true,
+            appendTo: 'body'
+        })
     }
 }
