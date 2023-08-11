@@ -16,7 +16,6 @@
 
   <TheErrorDialog />
   <TheLoading class="full" v-show="showFullLoading" />
-  <ThePrompt />
 </template>
 
 <script setup>
