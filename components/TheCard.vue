@@ -26,7 +26,7 @@
         <div class="divider" v-if="isFlip || isCloze"></div>
 
         <!-- back -->
-        <CardBack class="flex-1 p-2" v-if="isFlip || isCloze" :current="current" :isFlip="isFlip" />
+        <CardBack ref="backRef" class="flex-1 p-2" v-if="isFlip || isCloze" :current="current" :isFlip="isFlip" />
 
         <!-- status bar -->
         <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center items-center">
@@ -209,8 +209,9 @@ function showAnswer() {
     isFlip.value = true
 }
 const mediaRef = ref(null)
+const backRef = ref(null)
 function replayMedia() {
-    mediaRef?.value?.replay()
+    (mediaRef?.value || backRef?.value)?.replay()
 }
 onMounted(() => {
     window.addEventListener('keyup', handleKeyup)
