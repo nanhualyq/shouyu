@@ -1,8 +1,11 @@
 export async function fetchWrapper(fetch:Promise<any>) {
-    const fullLoading = useState('fullLoading')
-    fullLoading.value = true
+    const loading = ElLoading.service({
+        lock: true,
+        // text: 'Loading',
+        // background: 'rgba(0, 0, 0, 0.7)',
+      })
     const res = await fetch
-        .finally(() => fullLoading.value = false)
+        .finally(() => loading.close())
     if (res?.error.value) {
         useErrorDialog(res?.error)
     }

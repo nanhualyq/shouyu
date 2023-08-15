@@ -4,7 +4,8 @@
         <span id="back-text" v-else class="text-primary" v-html="backTextHtml">
         </span>
         <div class="mt-4 flex gap-2" v-show="needCloze || clozeEditing">
-            <button :disabled="!needCloze" @click="submitCloze" class="btn btn-primary">{{clozeEditing ? '修改' : '添加'}}填空卡片</button>
+            <button :disabled="!needCloze" @click="submitCloze" class="btn btn-primary">{{ clozeEditing ? '修改' :
+                '添加' }}填空卡片</button>
             <button class="btn" @click="cancelCloze">取消</button>
         </div>
     </div>
@@ -21,6 +22,7 @@ const props = defineProps({
     current: Object,
     isFlip: Boolean
 })
+const mediaRef = ref(null)
 const current = toRef(props, 'current')
 const backTextHtml = computed(() => {
     const isRead = current?.value?.card?.skill === 'read'
@@ -112,4 +114,10 @@ function cancelCloze() {
     getSelection()?.removeAllRanges()
     clozeEditing.value = false
 }
+function replay() {
+    mediaRef?.value?.replay()
+}
+defineExpose({
+    replay
+})
 </script>

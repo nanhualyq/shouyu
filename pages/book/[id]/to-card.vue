@@ -26,8 +26,7 @@
                 <option value="">全部</option>
                 <option v-for="skill in skills" :value="skill">{{ skill }}</option>
             </select>
-            <button type="submit" class="btn btn-block btn-primary sm:col-span-2"
-                :class="{ loading: submitting }">开始生成</button>
+            <button type="submit" class="btn btn-block btn-primary sm:col-span-2">开始生成</button>
         </form>
     </div>
 </template>
@@ -43,7 +42,6 @@ const formData = ref({
     lessons: [''],
     skills: ['']
 })
-let submitting = ref(false)
 async function submitBatch(params) {
     const data = {
         book_id: book?.value?.id
@@ -53,14 +51,13 @@ async function submitBatch(params) {
             data[key] = params?.[key]
         }
     }
-    const { data: count, pending, error } = await useFetch('/api/card/import', {
-        method: 'post',
-        body: data
-    })
-    submitting.value = pending.value
-    if (error.value) {
-        useErrorDialog(error)
-    } else {
+    const { data: count, error } = await fetchWrapper(
+        useFetch('/api/card/import', {
+            method: 'post',
+            body: data
+        })
+    )
+    if (!error.value) {
         ElNotification({
             title: '成功',
             message: `生成：${count.value?.changes}，跳过：${count.value?.total - count.value?.changes}`,

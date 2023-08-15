@@ -3,15 +3,21 @@ import os from "os";
 import { sendStream } from 'h3'
 import ffmpeg from "fluent-ffmpeg";
 import { path } from "@ffmpeg-installer/ffmpeg";
+import assert from "assert";
 ffmpeg.setFfmpegPath(path)
 
+interface queryObj {
+    media_url?: string, media_start?: string, media_end?: string
+}
+
 export default defineEventHandler(async event => {
-    const { media_url, media_start, media_end } = getQuery(event)
-    // const [, postfix] = String(media_url)?.match(/(\.\w+)$/) || []
-    const postfix = 'webm'
+    const { media_url, media_start, media_end } = getQuery(event) as queryObj
+    assert(media_url, 'media_url is required')
+    assert(media_start, 'media_start is required')
+    assert(media_end, 'media_end is required')
     const { mediaPath } = useRuntimeConfig()
     const url = mediaPath + media_url
-    const temFile = `${os.tmpdir()}/${Date.now()}.${postfix}`
+    const temFile = `${os.tmpdir()}/${Date.now()}.webm`
     try {
         await new Promise((resolve, reject) => {
             ffmpeg(url)
@@ -25,7 +31,7 @@ export default defineEventHandler(async event => {
                 .on('error', reject)
                 .run()
         })
-    } catch (error) {
+    } catch (error: any) {
         throw createError({ statusMessage: error?.message })
     }
     setTimeout(() => {
