@@ -22,5 +22,9 @@ export default defineNuxtConfig({
         enabled: true
     },
 
-    elementPlus: { /** Options */ }
+    elementPlus: { /** Options */ },
+
+    css: [
+        '@/assets/css/patch.css'
+    ]
 })
