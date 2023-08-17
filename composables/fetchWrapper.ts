@@ -1,6 +1,6 @@
 export async function fetchWrapper(fetch:Promise<any>) {
     const loading = ElLoading.service({
-        lock: true,
+        // lock: true,
         // text: 'Loading',
         // background: 'rgba(0, 0, 0, 0.7)',
       })
