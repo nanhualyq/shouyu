@@ -1,6 +1,6 @@
 {
   "name": "shouyu",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "like anki",
   "author": "nanhualyq@gmail.com",
   "main": "electron/main.js",

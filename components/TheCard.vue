@@ -95,7 +95,7 @@ let loading
 watch(pending, val => {
     if (val) {
         loading = ElLoading.service({
-            lock: true,
+            // lock: true,
         })
     } else {
         loading && loading.close()
