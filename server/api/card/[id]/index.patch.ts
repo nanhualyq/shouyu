@@ -9,7 +9,8 @@ export default defineEventHandler(async event => {
         }
         set += `${key}=`
         if (key === 'due_time') {
-            set += `datetime('now', '${val}')`
+            // set += `datetime('now', '${val}')`
+            set += val
         } else {
             set += `'${val}'`
         }

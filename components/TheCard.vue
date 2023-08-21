@@ -126,14 +126,20 @@ async function submitCard(index) {
         return
     }
     const { num, postfix } = parseTime(time)
-    const sqlitePostfix = postfix === 'm' ? 'minutes' : 'days'
+    const isMinute = postfix === 'm'
+    const sqlitePostfix = isMinute ? 'minutes' : 'days'
     const { id } = current?.value?.card
+    const route = useRoute()
+    let baseTime = route?.query?.due_date || 'now'
+    if (isMinute) {
+        baseTime = 'now'
+    }
     const { error } = await fetchWrapper(
         useFetch(`/api/card/${id}`, {
             method: 'PATCH',
             body: {
-                due_time: `+${num} ${sqlitePostfix}`,
-                skilled: postfix === 'm' ? 0 : num
+                due_time: `datetime('${baseTime}', '+${num} ${sqlitePostfix}')`,
+                skilled: isMinute ? 0 : num
             }
         })
     )
