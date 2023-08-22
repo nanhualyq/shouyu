@@ -17,15 +17,24 @@ export default defineEventHandler(async event => {
     assert(media_end, 'media_end is required')
     const { mediaPath } = useRuntimeConfig()
     const url = mediaPath + media_url
-    const temFile = `${os.tmpdir()}/${Date.now()}.webm`
+    let temFile = `${os.tmpdir()}/${Date.now()}`
     try {
+        temFile += await new Promise((resolve, reject) => {
+            ffmpeg.ffprobe(url, function (err, metadata) {
+                if (err) {
+                    return reject(err)
+                }
+                const isVideo = metadata?.streams?.some(row => row.codec_type === 'video' && !row?.disposition?.attached_pic)
+                resolve(isVideo ? '.mp4' : '.mp3')
+            });
+        })
         await new Promise((resolve, reject) => {
             ffmpeg(url)
                 .inputOptions([
                     `-ss ${media_start}`,
                     `-to ${media_end}`
                 ])
-                // .size('640x?')
+                .size('640x?')
                 .output(temFile)
                 .on('end', resolve)
                 .on('error', reject)
