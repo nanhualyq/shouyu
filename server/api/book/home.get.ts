@@ -6,6 +6,8 @@ export default defineEventHandler(async event => {
     left join sentence on (card.sentence_id = sentence.id)
     where card.due_time IS NULL AND sentence.book_id = book.id`
     return db.prepare(`select *, (${countSql}) as new_total from book 
-    where id in (${bookIdSql})`)
+        where id in (${bookIdSql})
+        ORDER BY new_total DESC
+    `)
         .all()
 })
