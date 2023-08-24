@@ -55,7 +55,7 @@
                 <p v-for="(v, i) in times"> <kbd class="kbd">{{ i + 1 }}</kbd> {{ v.label }} </p>
                 <p> <kbd class="kbd">E</kbd> 编辑内容 </p>
                 <p> <kbd class="kbd">R</kbd> 重播音频 </p>
-                <p> <kbd class="kbd">Delete</kbd> 删除卡片 </p>
+                <p> <kbd class="kbd">Delete</kbd> 删除卡片（移动端可双击“其他操作”快捷执行） </p>
             </div>
         </form>
         <form method="dialog" class="modal-backdrop">
