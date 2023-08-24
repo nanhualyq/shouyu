@@ -5,8 +5,8 @@
             label="查看上一句" :field="frontField" />
 
         <p class="current-sentence">
-            <TheMedia ref="mediaRef" v-if="isSkill('listen')" :sentence="current?.sentence" />
-            <span v-else class="inline-flex items-center">
+            <TheMedia ref="mediaRef" v-if="isSkill('read', 'listen')" :sentence="current?.sentence" />
+            <span v-if="!isSkill('listen')" class="inline-flex items-center">
                 <el-icon :size="20" color="rgb(75, 107, 251)">
                     <el-icon-Microphone v-if="isSkill('speak')" />
                     <el-icon-Reading v-if="isSkill('read', 'write')" />
@@ -28,12 +28,11 @@ const props = defineProps({
 })
 const book = toRef(props, 'book')
 const current = toRef(props, 'current')
-const currentSkill = computed(() => current?.value?.card?.skill)
 const frontField = computed(() => isSkill('write') ? 'text_local' : 'text_foreign')
 const mediaRef = ref(null)
 
 function isSkill(...skills) {
-    return skills.some(val => val?.toLowerCase() === currentSkill.value)
+    return skills.some(val => val?.toLowerCase() === current?.value?.card?.skill)
 }
 
 function replay() {
