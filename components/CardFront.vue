@@ -5,8 +5,10 @@
             label="查看上一句" :field="frontField" />
 
         <p class="current-sentence">
-            <TheMedia ref="mediaRef" v-if="isSkill('read', 'listen')" :sentence="current?.sentence" />
-            <span v-if="!isSkill('listen')" class="inline-flex items-center">
+            <div v-if="isSkill('read', 'listen')">
+                <TheMedia ref="mediaRef" :sentence="current?.sentence" />
+            </div>
+            <span v-if="!isSkill('listen')" class="inline-flex items-center gap-1">
                 <el-icon :size="20" color="rgb(75, 107, 251)">
                     <el-icon-Microphone v-if="isSkill('speak')" />
                     <el-icon-Reading v-if="isSkill('read', 'write')" />
@@ -49,6 +51,6 @@ defineExpose({
 }
 
 .current-sentence {
-    @apply my-2;
+    @apply my-2 flex flex-col gap-4;
 }
 </style>

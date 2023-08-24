@@ -1,9 +1,11 @@
 <template>
-    <div>
-        <TheMedia ref="mediaRef" v-if="isSkill('speak', 'write')" :sentence="current?.sentence" />
+    <div class="flex flex-col gap-4">
+        <div v-if="isSkill('speak', 'write') && !isCloze">
+            <TheMedia ref="mediaRef" :sentence="current?.sentence" />
+        </div>
         <span id="back-text" v-if="!isSkill('speak')" class="text-primary" v-html="backTextHtml">
         </span>
-        <div class="mt-4 flex gap-2" v-show="needCloze || clozeEditing">
+        <div class="flex gap-2" v-show="needCloze || clozeEditing">
             <button :disabled="!needCloze" @click="submitCloze" class="btn btn-primary">{{ clozeEditing ? '修改' :
                 '添加' }}填空卡片</button>
             <button class="btn" @click="cancelCloze">取消</button>
