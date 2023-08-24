@@ -7,7 +7,7 @@
         <!-- front -->
         <CardFront ref="frontRef" class="flex-1 p-2" :current="current" :book="book" />
 
-        <div class="divider" v-if="isFlip || isCloze"></div>
+        <div class="divider my-0" v-if="isFlip || isCloze"></div>
 
         <!-- back -->
         <CardBack ref="backRef" class="flex-1 p-2" v-if="isFlip || isCloze" :current="current" :isFlip="isFlip" />
