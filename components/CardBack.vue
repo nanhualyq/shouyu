@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-4">
-        <div v-if="isSkill('speak', 'write')">
+        <div v-if="isSkill('speak', 'write') && !isCloze">
             <TheMedia ref="mediaRef" :sentence="current?.sentence" />
         </div>
         <span id="back-text" v-if="!isSkill('speak')" class="text-primary" v-html="backTextHtml">
