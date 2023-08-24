@@ -5,23 +5,7 @@
     </div>
     <div v-else class="h-full flex flex-col">
         <!-- front -->
-        <div class="flex-1 p-2" :key="current?.card?.id">
-            <CardContext class="other-sentence"
-                :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position - 1 }"
-                label="查看上一句" :field="frontField" />
-
-            <p class="current-sentence">
-                <TheMedia ref="mediaRef" v-if="currentSkill === 'listen'" :sentence="current?.sentence" />
-                <span v-else class="inline-flex items-center">
-                    <img :src="`/${currentSkill === 'speak' ? 'speak' : 'read'}.svg`" class="w-8 h-8" />
-                    {{ current?.sentence?.[frontField] }}
-                </span>
-            </p>
-
-            <CardContext class="other-sentence"
-                :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position + 1 }"
-                label="查看下一句" :field="frontField" />
-        </div>
+        <CardFront ref="frontRef" class="flex-1 p-2" :current="current" :book="book" />
 
         <div class="divider" v-if="isFlip || isCloze"></div>
 
@@ -152,7 +136,6 @@ function doNext() {
     isFlip.value = false
 }
 const currentSkill = computed(() => current?.value?.card?.skill)
-const frontField = computed(() => currentSkill.value === 'write' ? 'text_local' : 'text_foreign')
 const times = computed(() => {
     const last = current?.value?.card?.skilled || 0
     const arr = [
@@ -214,10 +197,11 @@ async function handleDelete() {
 function showAnswer() {
     isFlip.value = true
 }
-const mediaRef = ref(null)
 const backRef = ref(null)
+const frontRef = ref(null)
 function replayMedia() {
-    (mediaRef?.value || backRef?.value)?.replay()
+    frontRef?.value?.replay()
+    backRef?.value?.replay()
 }
 onMounted(() => {
     window.addEventListener('keyup', handleKeyup)
@@ -266,14 +250,6 @@ function onSentenceChange(data) {
 </script>
 
 <style scoped lang="postcss">
-.other-sentence {
-    @apply opacity-30;
-}
-
-.current-sentence {
-    @apply my-2;
-}
-
 .buttons button {
     @apply flex-1 rounded-none normal-case animate-none;
 }
