@@ -1,7 +1,7 @@
 <template>
     <div>
-        <TheMedia ref="mediaRef" v-if="current?.card?.skill === 'speak'" :sentence="current?.sentence" />
-        <span id="back-text" v-else class="text-primary" v-html="backTextHtml">
+        <TheMedia ref="mediaRef" v-if="isSkill('speak', 'write')" :sentence="current?.sentence" />
+        <span id="back-text" v-if="!isSkill('speak')" class="text-primary" v-html="backTextHtml">
         </span>
         <div class="mt-4 flex gap-2" v-show="needCloze || clozeEditing">
             <button :disabled="!needCloze" @click="submitCloze" class="btn btn-primary">{{ clozeEditing ? '修改' :
@@ -25,8 +25,7 @@ const props = defineProps({
 const mediaRef = ref(null)
 const current = toRef(props, 'current')
 const backTextHtml = computed(() => {
-    const isRead = current?.value?.card?.skill === 'read'
-    let text = current?.value?.sentence?.[isRead ? 'text_local' : 'text_foreign']
+    let text = current?.value?.sentence?.[isSkill('read') ? 'text_local' : 'text_foreign']
     const cloze = current?.value?.card?.cloze
     if (!cloze || clozeEditing.value) {
         return text
@@ -113,6 +112,9 @@ async function submitCloze() {
 function cancelCloze() {
     getSelection()?.removeAllRanges()
     clozeEditing.value = false
+}
+function isSkill(...skills) {
+    return skills.some(val => val?.toLowerCase() === current?.value?.card?.skill)
 }
 function replay() {
     mediaRef?.value?.replay()

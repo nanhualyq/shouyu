@@ -41,6 +41,7 @@ export default defineEventHandler(async event => {
                 .run()
         })
     } catch (error: any) {
+        console.error(error);
         throw createError({ statusMessage: error?.message })
     }
     setTimeout(() => {
