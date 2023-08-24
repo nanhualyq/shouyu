@@ -20,7 +20,7 @@
                 第{{ current?.sentence?.lesson }}课
                 第{{ current?.sentence?.position }}句</p>
             <div class="relative group">
-                <button class="btn btn-link btn-xs link-neutral">其他操作</button>
+                <button class="btn btn-link btn-xs link-neutral" @dblclick="handleDelete">其他操作</button>
                 <ul class="group-hover:block absolute right-5 bottom-5 bg-gray-100 border shadow p-2 rounded w-max hidden">
                     <li>
                         <button @click="openSentenceDialog" class="btn btn-link">修改内容</button>
