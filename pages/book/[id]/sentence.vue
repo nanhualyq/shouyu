@@ -65,7 +65,7 @@
             <tfoot>
                 <tr>
                     <th colspan="9" class="text-center">
-                        <ThePagination v-model="pageParams" :total="sentencesResult?.total" :limit="pageParams.limit" />
+                        <ThePagination ref="pageRef" v-model="pageParams" :total="sentencesResult?.total" :limit="pageParams.limit" />
                         <button class="btn btn-primary ml-4" @click="handleSave">保存修改</button>
                     </th>
                 </tr>
@@ -168,8 +168,10 @@ const pageParams = ref({
     limit: 50,
     offset: 0
 })
+const pageRef = ref(null)
 function lessonChange() {
-    pageParams.value.offset = 0
+    // pageParams.value.offset = 0
+    pageRef.value?.reset()
 }
 const sentencesQuery = computed(() => ({
     book_id: book?.value?.id,
