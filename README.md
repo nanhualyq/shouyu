@@ -78,7 +78,7 @@ Email: `nanhualyq@gmail.com`
 <img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256467999-89fe3722-ee40-4898-aaaa-f16574ac4a9d.png"/>
 </details>
 
----
+<!-- ---
 ## 捐赠
 
 多少都是鼓励，大小都是帮助，随意就好。
@@ -92,4 +92,4 @@ Email: `nanhualyq@gmail.com`
 
 微信支付：
 
-<img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256462827-27030ec3-edae-447f-87ac-6590b685f644.jpg"/>
+<img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256462827-27030ec3-edae-447f-87ac-6590b685f644.jpg"/> -->
