@@ -14,7 +14,7 @@
     <div class="flex gap-2">
         <button class="btn btn-primary" @click="addRow">+新增一句</button>
         <button class="btn btn-primary btn-link" onclick="sentence_shortcut_dialog.showModal()">快捷键</button>
-        <select class="select select-bordered" v-model="formData.lesson">
+        <select class="select select-bordered" v-model="formData.lesson" @change="lessonChange">
             <option disabled selected :value="null">选择课程</option>
             <option v-for="lesson in lessons" :value="lesson.lesson">
                 {{ lesson.lesson }} {{ lesson.text_foreign }}
@@ -168,6 +168,9 @@ const pageParams = ref({
     limit: 50,
     offset: 0
 })
+function lessonChange() {
+    pageParams.value.offset = 0
+}
 const sentencesQuery = computed(() => ({
     book_id: book?.value?.id,
     lesson: formData?.value?.lesson,
