@@ -1,5 +1,7 @@
 export default defineEventHandler(event => {
     return db
-        .prepare('select * from sentence where book_id=? AND position=1')
+        .prepare(`SELECT * FROM sentence 
+            WHERE book_id=?
+            GROUP BY lesson`)
         .all(event?.context?.params?.id)
 })

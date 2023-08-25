@@ -11,7 +11,7 @@
             <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256467999-89fe3722-ee40-4898-aaaa-f16574ac4a9d.png" alt="微信号：shouxiaoyu2023">
         </p>
         
-        <h2>捐赠</h2>
+        <!-- <h2>捐赠</h2>
         <p class="text-secondary">
             多少都是鼓励，大小都是帮助，随意就好。
             <br>
@@ -26,7 +26,7 @@
             微信支付
             <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256462827-27030ec3-edae-447f-87ac-6590b685f644.jpg"
                 alt="微信支付">
-        </div>
+        </div> -->
     </div>
 </template>
 
