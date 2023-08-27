@@ -13,14 +13,14 @@
         <CardBack ref="backRef" class="flex-1 p-2" v-if="isFlip || isCloze" :current="current" :isFlip="isFlip" />
 
         <!-- status bar -->
-        <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center items-center">
+        <div class="p-2 text-xs flex flex-wrap gap-4 opacity-50 justify-center items-center" @dblclick="handleDelete">
             <p class="text-primary">{{ current?.$?.total }}</p>
             <p>{{ skillCn[currentSkill] }}</p>
             <p>《{{ book?.name }}》
                 第{{ current?.sentence?.lesson }}课
                 第{{ current?.sentence?.position }}句</p>
             <div class="relative group">
-                <button class="btn btn-link btn-xs link-neutral" @dblclick="handleDelete">其他操作</button>
+                <button class="btn btn-link btn-xs link-neutral">其他操作</button>
                 <ul class="group-hover:block absolute right-5 bottom-5 bg-gray-100 border shadow p-2 rounded w-max hidden">
                     <li>
                         <button @click="openSentenceDialog" class="btn btn-link">修改内容</button>
@@ -55,7 +55,7 @@
                 <p v-for="(v, i) in times"> <kbd class="kbd">{{ i + 1 }}</kbd> {{ v.label }} </p>
                 <p> <kbd class="kbd">E</kbd> 编辑内容 </p>
                 <p> <kbd class="kbd">R</kbd> 重播音频 </p>
-                <p> <kbd class="kbd">Delete</kbd> 删除卡片（移动端可双击“其他操作”快捷执行） </p>
+                <p> <kbd class="kbd">Delete</kbd> 删除卡片（移动端可双击底部状态栏快捷执行） </p>
             </div>
         </form>
         <form method="dialog" class="modal-backdrop">
