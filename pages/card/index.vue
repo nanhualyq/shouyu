@@ -62,7 +62,7 @@
     </div>
 
     <dialog id="preview_dialog" class="modal" @close="onPreviewClose">
-        <form method="dialog" class="modal-box min-h-full h-0" @submit.prevent="">
+        <form method="dialog" class="modal-box" @submit.prevent="">
             <TheCard :query="cardQuery" is-preview v-if="cardQuery['card.id']" />
         </form>
         <form method="dialog" class="modal-backdrop">

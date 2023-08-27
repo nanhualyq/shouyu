@@ -30,4 +30,11 @@ function handleChange() {
         offset
     })
 }
+function reset() {
+    currentPage.value = 1
+    handleChange()
+}
+defineExpose({
+    reset
+})
 </script>
