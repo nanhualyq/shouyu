@@ -98,7 +98,7 @@ const lesson = ref()
 const mediaProps = ref({})
 const { data: sentencesResult, refresh: refreshSentences, pending } = useFetch('/api/sentence', {
     query: {
-        book_id: book?.value?.id,
+        book_id: id,
         lesson
     },
     immediate: false
