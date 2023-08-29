@@ -89,7 +89,7 @@
 </template>
 <script setup>
 const { params: { id } } = useRoute()
-const { data: book } = useFetch('/api/book/' + id)
+const { data: book } = await useFetch('/api/book/' + id)
 const { data: lessons, refresh: refreshLessons } = useFetch(`/api/book/${id}/lessons`)
 const skills = computed(() => {
     return book?.value?.skills?.split(',')
@@ -112,7 +112,7 @@ const sentences = computed(() => {
     if (data?.length > 0) {
         return data
     }
-    return [{ book_id: book?.value?.id }]
+    return [{ book_id: id }]
 })
 const myHotRef = ref(null)
 function getHot() {
