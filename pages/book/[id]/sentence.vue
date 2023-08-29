@@ -1,93 +1,37 @@
 <template>
-    <div class="text-sm breadcrumbs">
-        <ul>
-            <li>
-                <NuxtLink to="/">首页</NuxtLink>
-            </li>
-            <li>
-                <NuxtLink to="/book">材料</NuxtLink>
-            </li>
-            <li>{{ book?.name }}</li>
-            <li>管理内容</li>
-        </ul>
-    </div>
-    <div class="flex gap-2">
-        <button class="btn btn-primary" @click="addRow">+新增一句</button>
-        <button class="btn btn-primary btn-link" onclick="sentence_shortcut_dialog.showModal()">快捷键</button>
-        <select class="select select-bordered" v-model="formData.lesson" @change="lessonChange">
-            <option disabled selected :value="null">选择课程</option>
-            <option v-for="lesson in lessons" :value="lesson.lesson">
-                {{ lesson.lesson }} {{ lesson.text_foreign }}
-            </option>
-        </select>
-    </div>
-    <div class="overflow-x-auto" v-show="sentences?.length" :class="{ loading: pending }">
-        <table class="table" @keydown.enter.ctrl.exact="handleSave" @keydown.left.ctrl.shift.exact="handleArrow(-1)"
-            @keydown.right.ctrl.shift.exact="handleArrow(+1)" @keydown.left.ctrl.exact="handleArrow(-0.1)"
-            @keydown.right.ctrl.exact="handleArrow(+0.1)" @keydown.up.exact="moveFocusLine($event, 'up')"
-            @keydown.down.exact="moveFocusLine($event, 'down')" @keydown.r.alt.exact="replay"
-            @keydown.r.ctrl.alt.exact="replayEnd">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>lesson</th>
-                    <th>position
-                        <br>
-                        <button class="btn btn-xs" @click="resetPosition">本课重置</button>
-                    </th>
-                    <th>text_foreign</th>
-                    <th>text_local</th>
-                    <th>media_url
-                        <br>
-                        <button class="btn btn-xs" @click="handleBatchUrl">批量修改</button>
-                    </th>
-                    <th>media_start</th>
-                    <th>media_end</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="sentence in sentences" @focus.capture="handleFocusTr($event, sentence)"
-                    @blur.capture="handleBlurTr" class="hover">
-                    <th>{{ sentence.id }}</th>
-                    <td v-for="field in ['lesson', 'position', 'text_foreign', 'text_local', 'media_url', 'media_start', 'media_end']"
-                        :data-field="field" contenteditable>{{ sentence?.[field] }}</td>
-                    <td class="flex gap-2 flex-wrap">
-                        <select class="select select-xs" @change="importSentence($event, sentence)">
-                            <option disabled selected>生成卡片</option>
-                            <option value="">全部</option>
-                            <option v-for="skill in skills" :value="skill">{{ skill }}</option>
-                        </select>
-                        <button class="btn btn-xs btn-error" @click="delRow">删除</button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="9" class="text-center">
-                        <ThePagination ref="pageRef" v-model="pageParams" :total="sentencesResult?.total" :limit="pageParams.limit" />
-                        <button class="btn btn-primary ml-4" @click="handleSave">保存修改</button>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    <Teleport to="body">
-        <div id="time-modal" class="fixed z-10 right-2 bg-white border border-gray-500 p-2 rounded-xl flex flex-col gap-2"
-            v-if="isMediaField" :style="editorPosition">
-            <TheMedia v-if="showMedia" ref="mediaRef" :sentence="mediaProps" />
-            <div class="btn-group flex gap-1 mt-2">
-                <button class="btn flex-1" @click="handleMediaTime(-1)">-1</button>
-                <button class="btn flex-1" @click="handleMediaTime(-0.1)">-0.1</button>
-                <button class="btn flex-1" @click="handleMediaTime(+0.1)">+0.1</button>
-                <button class="btn flex-1" @click="handleMediaTime(+1)">+1</button>
-            </div>
-            <div class="btn-group flex gap-1 mt-2">
-                <button class="btn flex-1" @click="replay">从头试播</button>
-                <button class="btn flex-1" @click="replayEnd">试播末尾</button>
-            </div>
+    <div class="flex-1 flex flex-col" v-loading="pending">
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li>
+                    <NuxtLink to="/">首页</NuxtLink>
+                </li>
+                <li>
+                    <NuxtLink to="/book">材料</NuxtLink>
+                </li>
+                <li>{{ book?.name }}</li>
+                <li>管理内容</li>
+            </ul>
         </div>
-    </Teleport>
+        <div class="flex gap-2 mb-2">
+            <button class="btn btn-primary" @click="handleSave">保存修改</button>
+            <button class="btn btn-primary btn-link" onclick="sentence_shortcut_dialog.showModal()">快捷键</button>
+            <select class="select select-bordered" v-model="lesson">
+                <option disabled selected :value="null">选择课程</option>
+                <option v-for="lesson in lessons" :value="lesson.lesson">
+                    {{ lesson.lesson }} {{ lesson.text_foreign }}
+                </option> 
+            </select>
+        </div>
+        <ClientOnly>
+            <MyHotTable ref="myHotRef" :data="sentences" :rowHeaders="true" :colHeaders="colHeaders"
+                :columns="columns" :hiddenColumns="hiddenColumns" :contextMenu="contextMenu"
+                :afterCreateRow="afterCreateRow" :beforeRemoveRow="beforeRemoveRow" :afterRemoveRow="afterRemoveRow" />
+            <el-dialog :model-value="!!mediaProps?.id" title="预览" @close="mediaProps = null">
+                <h2 class="mb-4">{{ mediaProps?.text_foreign }}</h2>
+                <TheMedia v-if="mediaProps" ref="mediaRef" :sentence="mediaProps" />
+            </el-dialog>
+        </ClientOnly>
+    </div>
     <dialog id="sentence_shortcut_dialog" class="modal">
         <form method="dialog" class="modal-box">
             <h3 class="font-bold text-lg">键盘快捷键</h3>
@@ -95,58 +39,46 @@
                 <p>
                     <kbd class="kbd">Ctrl</kbd>
                     +
-                    <kbd class="kbd">Enter</kbd>
+                    <kbd class="kbd">S</kbd>
                     保存修改
                 </p>
+                <hr>
+                （聚焦在媒体时间单元格时）
                 <p>
-                    <kbd class="kbd">Ctrl</kbd>
+                    <kbd class="kbd">Alt</kbd>
                     +
-                    <kbd class="kbd">◀︎</kbd>
+                    <kbd class="kbd">▼</kbd>
                     时间-0.1
                 </p>
                 <p>
-                    <kbd class="kbd">Ctrl</kbd>
+                    <kbd class="kbd">Alt</kbd>
                     +
-                    <kbd class="kbd">▶︎</kbd>
+                    <kbd class="kbd">▲</kbd>
                     时间+0.1
                 </p>
                 <p>
                     <kbd class="kbd">Ctrl</kbd>
                     +
-                    <kbd class="kbd">Shift</kbd>
+                    <kbd class="kbd">Alt</kbd>
                     +
-                    <kbd class="kbd">◀︎</kbd>
+                    <kbd class="kbd">▼</kbd>
                     时间-1
                 </p>
                 <p>
                     <kbd class="kbd">Ctrl</kbd>
                     +
-                    <kbd class="kbd">Shift</kbd>
+                    <kbd class="kbd">Alt</kbd>
                     +
-                    <kbd class="kbd">▶︎</kbd>
+                    <kbd class="kbd">▲</kbd>
                     时间+1
                 </p>
                 <p>
-                    <kbd class="kbd">▲</kbd>
-                    光标移到上一行
+                    <kbd class="kbd">Space</kbd>
+                    从头试播（media_start）
                 </p>
                 <p>
-                    <kbd class="kbd">▼</kbd>
-                    光标移到下一行
-                </p>
-                <p>
-                    <kbd class="kbd">Alt</kbd>
-                    +
-                    <kbd class="kbd">R</kbd>
-                    从头试播
-                </p>
-                <p>
-                    <kbd class="kbd">Ctrl</kbd>
-                    +
-                    <kbd class="kbd">Alt</kbd>
-                    +
-                    <kbd class="kbd">R</kbd>
-                    试播末尾
+                    <kbd class="kbd">Space</kbd>
+                    试播末尾（media_end）
                 </p>
             </div>
         </form>
@@ -159,39 +91,124 @@
 const { params: { id } } = useRoute()
 const { data: book } = useFetch('/api/book/' + id)
 const { data: lessons, refresh: refreshLessons } = useFetch(`/api/book/${id}/lessons`)
-const formData = ref({
-    lesson: null
+const skills = computed(() => {
+    return book?.value?.skills?.split(',')
 })
-let currentSentence = ref({})
+const lesson = ref()
 const mediaProps = ref({})
-const pageParams = ref({
-    limit: 50,
-    offset: 0
-})
-const pageRef = ref(null)
-function lessonChange() {
-    // pageParams.value.offset = 0
-    pageRef.value?.reset()
-}
-const sentencesQuery = computed(() => ({
-    book_id: book?.value?.id,
-    lesson: formData?.value?.lesson,
-    limit: pageParams.value?.limit,
-    offset: pageParams.value?.offset
-}))
 const { data: sentencesResult, refresh: refreshSentences, pending } = useFetch('/api/sentence', {
-    query: sentencesQuery,
+    query: {
+        book_id: book?.value?.id,
+        lesson
+    },
     immediate: false
 })
-const sentences = computed(() => sentencesResult?.value?.data)
+if (!lesson.value) {
+    pending.value = false
+}
+const sentences = computed(() => {
+    const data = sentencesResult?.value?.data
+    if (data?.length > 0) {
+        return data
+    }
+    return [{ book_id: book?.value?.id }]
+})
+const myHotRef = ref(null)
+function getHot() {
+    return myHotRef.value.hotRef.hotInstance
+}
+let deleteIds = new Set()
+watch(sentencesResult, () => {
+    deleteIds = new Set()
+    getHot().loadData(sentences.value)
+})
+const colHeaders = ['id', 'book_id', 'lesson', 'position', 'text_foreign', 'text_local', 'media_url', 'media_start', 'media_end']
+const columns = colHeaders.map(data => ({ data, readOnly: data === 'id' }))
+const hiddenColumns = {
+    columns: [1],
+    indicators: false,
+}
+const contextMenu = {
+    callback(key, selection, clickEvent) {
+        if (key.startsWith('card:')) {
+            importSentence(key, selection)
+        }
+    },
+    items: {
+        row_above: {},
+        row_below: {},
+        remove_row: {},
+        clear_column: {},
+        undo: {},
+        redo: {},
+        cut: {},
+        copy: {},
+        card: {
+            name: 'Generate card',
+            submenu: {
+                items: [
+                    { key: 'card:all', name: 'all' },
+                    ...(skills.value || []).map(name => ({ key: `card:${name}`, name }))
+                ]
+            }
+        }
+    }
+}
+function afterCreateRow(index) {
+    getHot().setDataAtRowProp(index, 'book_id', book?.value?.id)
+    if ([lesson.value]) {
+        getHot().setDataAtRowProp(index, 'lesson', [lesson.value])
+    }
+    resetPosition()
+}
+function beforeRemoveRow(index, total, indexArr) {
+    for (const i of indexArr) {
+        const id = getHot().getDataAtRowProp(i, 'id')
+        if (id) {
+            deleteIds.add(id)
+        }
+    }
+}
+function afterRemoveRow() {
+    resetPosition()
+}
+function handleKeydown(e) {
+    // console.log(e);
+    if (e.key === 's' && e.ctrlKey) {
+        handleSave()
+        e.preventDefault()
+        return
+    }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        handleMediaTime(e)
+        return
+    }
+    if (e.key === ' ') {
+        handlePreview(e)
+        return
+    }
+}
+const mediaRef = ref(null)
+function handlePreview(keyEvent) {
+    const { row, prop } = getHot()?.getActiveEditor() || {}
+    if (!['media_start', 'media_end'].includes(prop)) {
+        return
+    }
+    mediaProps.value = getHot().getSourceDataAtRow(row)
+    if (prop === 'media_end') {
+        nextTick(() => {
+            mediaRef?.value?.playStartOf(-3)
+        })
+    }
+    keyEvent.preventDefault()
+    keyEvent.stopPropagation()
+}
 async function handleSave() {
-    syncTdData(focusTd.value)
-
+    await handleDeleteRows()
     const { error } = await fetchWrapper(
         useFetch('/api/sentence', {
-            method: 'PATCH',
-            body: sentences.value,
-            watch: false,
+            method: 'post',
+            body: getHot().getSourceData()
         })
     )
     if (!error.value) {
@@ -200,105 +217,29 @@ async function handleSave() {
             type: 'success',
         })
         refreshSentences()
+        refreshLessons()
     }
 }
-onBeforeRouteLeave(() => {
-    sentences.value = []
-})
-function handleBatchUrl() {
-    ElMessageBox.prompt('', '请输入新的url')
-        .then(({ value }) => {
-            if (!value) {
-                return
-            }
-            for (const row of sentences.value) {
-                row.media_url = value
-            }
-        })
-        .catch(() => { })
-}
-const mediaRef = ref(null)
-const focusTd = ref(null)
-const focusField = computed(() => focusTd.value?.dataset?.field)
-const isMediaField = computed(() => ['media_start', 'media_end'].includes(focusField.value))
-const editorPosition = computed(() => {
-    if (!isMediaField.value) {
+function handleDeleteRows() {
+    const tableIds = new Set(getHot().getDataAtProp('id'))
+    const removeIds = Array.from(deleteIds)
+        .filter(id => !tableIds.has(id))
+    if (removeIds.length === 0) {
         return
     }
-    const { bottom, top } = focusTd.value?.getBoundingClientRect()
-    if (bottom > document.body.clientHeight / 2) {
-        return {
-            top: top + 'px',
-            transform: 'translateY(-100%)'
-        }
-    }
-    return {
-        top: bottom + 'px'
-    }
-})
+    fetchWrapper(
+        useFetch('/api/sentence', {
+            method: 'delete',
+            body: removeIds
+        })
+    )
+}
 onMounted(() => {
-    window.addEventListener('focus', handleFocusBound, true)
-    window.addEventListener('click', handleFocusBound, true)
+    window.addEventListener('keydown', handleKeydown, true)
 })
 onUnmounted(() => {
-    window.removeEventListener('focus', handleFocusBound, true)
-    window.removeEventListener('click', handleFocusBound, true)
+    window.removeEventListener('keydown', handleKeydown, true)
 })
-let timeout
-function handleFocusBound() {
-    if (timeout) {
-        clearTimeout(timeout)
-    }
-    timeout = setTimeout(() => handleFocus(...arguments), 100)
-}
-function handleFocus(e) {
-    if (e?.target?.closest?.('#focus-td') || e?.target?.closest?.('#time-modal')) {
-        return
-    }
-    document.getElementById('focus-td')?.removeAttribute('id')
-    focusTd.value = null
-    currentSentence.value = null
-}
-function handleFocusTr(e, sentence) {
-    if (!e.target.tagName === 'TD') {
-        return
-    }
-    document.getElementById('focus-td')?.removeAttribute('id')
-    e.target.id = 'focus-td'
-    focusTd.value = e.target
-    currentSentence.value = sentence
-}
-function handleBlurTr(e) {
-    if (!e.target.tagName === 'TD') {
-        return
-    }
-    syncTdData(e.target)
-}
-function syncTdData(td) {
-    if (focusField.value) {
-        currentSentence.value[focusField.value] = td?.textContent
-    }
-}
-function replay() {
-    syncMediaProps()
-    nextTick(() => {
-        mediaRef?.value?.playStartOf()
-    })
-}
-function replayEnd() {
-    syncMediaProps()
-    nextTick(() => {
-        mediaRef?.value?.playStartOf(-3)
-    })
-}
-function syncMediaProps() {
-    syncTdData(focusTd.value)
-    const { media_url, media_start, media_end } = currentSentence.value || {}
-    mediaProps.value = {
-        media_url, media_start, media_end
-    }
-}
-
 function time2Seconds(h, m, s) {
     let seconds = +s
     if (m > 0) {
@@ -321,9 +262,19 @@ function seconds2Time(seconds) {
     const decimal = String(rest)?.match(/(?:^\d+)?(.\d{1,3})/)?.[1]
     return arr.join(':') + decimal
 }
-function handleMediaTime(offset) {
-    syncTdData(focusTd.value)
-    let val = currentSentence.value[focusField.value]
+function handleMediaTime(keyEvent) {
+    if (!keyEvent.altKey) {
+        return
+    }
+    const { row, prop } = getHot().getActiveEditor()
+    if (!['media_start', 'media_end'].includes(prop)) {
+        return
+    }
+    let val = getHot().getDataAtRowProp(row, prop)
+    let offset = keyEvent.ctrlKey ? 1 : 0.1
+    if (keyEvent.key === 'ArrowDown') {
+        offset = -offset
+    }
     const { h, m, s } = String(val || '')
         ?.match(/^(?:(?:(?<h>\d{2}):)?(?<m>\d{2}):)?(?<s>\d{2}(?:\.\d+)?)$/)
         ?.groups || {}
@@ -332,92 +283,29 @@ function handleMediaTime(offset) {
         val = 0
     }
     const isComplex = !!m
-    currentSentence.value[focusField.value] = isComplex ? seconds2Time(val) : val.toFixed(2)
+    const newVal = isComplex ? seconds2Time(val) : val.toFixed(2)
+    getHot().setDataAtRowProp(row, prop, newVal)
+    keyEvent.preventDefault()
 }
-function handleArrow(offset) {
-    if (!isMediaField.value) {
-        return
-    }
-    handleMediaTime(offset)
-}
-function moveFocusLine(e, direction) {
-    if (!e.target.tagName === 'TD') {
-        return
-    }
-    const key = direction === 'up' ? 'previousElementSibling' : 'nextElementSibling'
-    const sibling = e.target.closest('tr')?.[key]
-    if (sibling) {
-        sibling?.querySelector(`td[data-field="${focusField.value}"]`)?.focus()
-    }
-}
-async function delRow() {
-    if (!confirm('将删除所有关联的卡片，确认？')) {
-        return
-    }
-    const { error } = await fetchWrapper(
-        useFetch('/api/sentence/' + currentSentence.value.id, {
-            method: 'DELETE',
-            watch: false,
-        })
-    )
-    if (!error.value) {
-        ElNotification({
-            title: '删除成功',
-            type: 'success',
-        })
-        refreshSentences()
-    }
-}
-async function addRow() {
-    const { book_id, lesson } = sentencesQuery.value || {}
+async function importSentence(action, selections) {
     const body = {
-        book_id, lesson
+        sentences: [],
+        skills: skills.value
     }
-    // 课程是手动输入的话，完成后要自动选中该课程
-    let lessonInputed = false
-    if (body.lesson == null) {
-        const maxLesson = lessons.value?.[lessons.value?.length - 1]?.lesson || 0
-        const res = await ElMessageBox.prompt('没有选择课程，请自行填入', '第几课',
-            { inputValue: maxLesson + 1 })
-            .catch(() => { })
-        if (!res?.value) {
-            return
+    const skill = action.replace(/^card:/, '')
+    if (skill !== 'all') {
+        body.skills = [skill]
+    }
+    for (const part of selections) {
+        for (let i = part.start.row; i <= part.end.row; i++) {
+            const id = getHot().getDataAtRowProp(i, 'id')
+            if (id) {
+                body.sentences.push(id)
+            }
         }
-        body.lesson = +res.value
-        lessonInputed = true
     }
-    body.position = (sentences.value?.[sentences.value?.length - 1]?.position || 0) + 1
-    body.text_foreign = ''
-    body.text_local = ''
-    const { error } = await fetchWrapper(
-        useFetch('/api/sentence/', {
-            method: 'post',
-            body
-        })
-    )
-    if (!error.value) {
-        ElNotification({
-            title: '添加成功',
-            type: 'success',
-        })
-        if (lessonInputed) {
-            await refreshLessons()
-            formData.value.lesson = body.lesson
-        }
-        refreshSentences()
-    }
-}
-const skills = computed(() => {
-    return book?.value?.skills?.split(',')
-})
-async function importSentence(e, row) {
-    const body = {
-        book_id: book?.value?.id,
-        lessons: [row.lesson],
-        position: [row.position]
-    }
-    if (e.target.value) {
-        body.skills = [e.target.value]
+    if (body.sentences.length === 0) {
+        return
     }
     const { data } = await fetchWrapper(
         useFetch('/api/card/import', {
@@ -430,33 +318,22 @@ async function importSentence(e, row) {
         message: `生成：${data.value?.changes}，跳过：${data.value?.total - data.value?.changes}`,
         type: 'success',
     })
-    e.target.value = e.target.options[0].value
 }
-function resetPosition() {
-    const { book_id, lesson } = sentencesQuery.value
-    fetchWrapper(
-        useFetch(`/api/sentence/reset-position`, {
-            method: 'PATCH',
-            body: {
-                book_id, lesson
+async function resetPosition(start = 0) {
+    const length = getHot().getData().length
+    const end = Math.min(start + 10, length)
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            for (let i = start; i < end; i++) {
+                getHot().setDataAtRowProp(i, 'position', i + 1)
             }
-        })
-    )
-        .then(() => {
-            ElNotification({
-                title: '重置完成',
-                type: 'success',
-            })
-            refreshSentences()
-        })
+            resolve()
+        }, 0);
+    })
+    if (end < length) {
+        resetPosition(end)
+    }
 }
-watch(currentSentence, () => {
-    mediaProps.value = {}
-})
-const showMedia = computed(() => {
-    const vals = Object.values(mediaProps.value)
-    return vals.length && vals.every(Boolean)
-})
 </script>
 <style scoped lang="postcss">
 #focus-td {

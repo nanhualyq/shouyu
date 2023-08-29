@@ -1,6 +1,6 @@
 {
   "name": "shouyu",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "like anki",
   "author": "nanhualyq@gmail.com",
   "main": "electron/main.js",
@@ -21,6 +21,7 @@
     "@electron/rebuild": "^3.2.13",
     "@element-plus/nuxt": "^1.0.5",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@handsontable/vue3": "^13.0.0",
     "@nuxt/devtools": "^0.7.2",
     "@nuxtjs/tailwindcss": "^6.7.0",
     "@types/better-sqlite3": "^7.6.4",
@@ -32,6 +33,7 @@
     "electron-builder": "^24.6.3",
     "element-plus": "^2.3.9",
     "fluent-ffmpeg": "^2.1.2",
+    "handsontable": "^13.0.0",
     "nuxt": "^3.4.0"
   },
   "build": {
