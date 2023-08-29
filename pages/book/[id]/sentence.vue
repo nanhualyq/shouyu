@@ -105,6 +105,7 @@ const { data: sentencesResult, refresh: refreshSentences, pending } = useFetch('
 })
 if (!lesson.value) {
     pending.value = false
+    sentencesResult.value = {}
 }
 const sentences = computed(() => {
     const data = sentencesResult?.value?.data
