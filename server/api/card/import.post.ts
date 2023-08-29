@@ -1,7 +1,5 @@
-export default defineEventHandler(async event => {
-    const { book_id, lessons, position, skills } = await readBody(event)
-
-    // sentences
+async function getSentencesByBook(body: any) {
+    const { book_id, lessons, position } = body
     let lessonCondition = ''
     // 非全选
     if (lessons?.length) {
@@ -10,25 +8,32 @@ export default defineEventHandler(async event => {
     if (position?.length) {
         lessonCondition += ` AND position in (${position.join(',')})`
     }
-    const sentences = await db.prepare('select id from sentence where book_id=?' + lessonCondition)
+    return db.prepare('select id from sentence where book_id=?' + lessonCondition)
         .pluck()
         .all(book_id)
+}
+
+export default defineEventHandler(async event => {
+    const body = await readBody(event)
+
+    let { sentences, skills, book_id } = body
+    if (!Array.isArray(sentences)) {
+        sentences = await getSentencesByBook(body)
+    }
 
     // skills
-    let needSkills = skills
     // 全选
-    if (!skills?.length) {
+    if (!skills?.length && book_id) {
         const res = await db.prepare('select skills from book where id=?')
             .pluck()
             .get(book_id)
-        needSkills = (res as String)?.split(',')
+        skills = (res as String)?.split(',')
     }
 
-    
     // cards
     const rows = []
     for (const sentence_id of sentences) {
-        for (const skill of needSkills) {
+        for (const skill of skills) {
             rows.push(`(${sentence_id},'${skill}')`)
         }
     }

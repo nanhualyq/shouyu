@@ -1,4 +1,17 @@
 export default defineEventHandler(async event => {
     const body = await readBody(event)
-    return db.prepare(`INSERT INTO sentence (book_id, lesson, position, text_foreign, text_local) VALUES (@book_id, @lesson, @position, @text_foreign, @text_local);`).run(body)
+    let arr = body
+    if (!Array.isArray(body)) {
+        arr = [body]
+    }
+    await db.transaction(() => {
+        for (const row of arr) {
+            const keys = Object.keys(row)
+            db.prepare(`REPLACE INTO sentence
+            (${keys.join(',')})
+            VALUES (${keys.map(s => `@${s}`).join(',')})`)
+                .run(row)
+        }
+    })()
+    return 200
 })
