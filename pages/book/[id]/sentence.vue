@@ -25,7 +25,7 @@
         <ClientOnly>
             <MyHotTable ref="myHotRef" :data="sentences" :rowHeaders="true" :colHeaders="colHeaders"
                 :columns="columns" :hiddenColumns="hiddenColumns" :contextMenu="contextMenu"
-                :afterCreateRow="afterCreateRow" :beforeRemoveRow="beforeRemoveRow" :afterRemoveRow="afterRemoveRow" />
+                :afterCreateRow="afterCreateRow" :beforeRemoveRow="beforeRemoveRow" :afterRemoveRow="afterRemoveRow" currentRowClassName="current-row" />
             <el-dialog :model-value="!!mediaProps?.id" title="预览" @close="mediaProps = null">
                 <h2 class="mb-4">{{ mediaProps?.text_foreign }}</h2>
                 <TheMedia v-if="mediaProps" ref="mediaRef" :sentence="mediaProps" />
@@ -337,7 +337,7 @@ async function resetPosition(start = 0) {
 }
 </script>
 <style scoped lang="postcss">
-#focus-td {
+:deep(.current-row) {
     @apply bg-primary-content;
 }
 </style>
