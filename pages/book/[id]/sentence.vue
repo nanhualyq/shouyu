@@ -25,7 +25,7 @@
         <ClientOnly>
             <MyHotTable ref="myHotRef" :data="sentences" :rowHeaders="true" :colHeaders="colHeaders"
                 :columns="columns" :hiddenColumns="hiddenColumns" :contextMenu="contextMenu"
-                :afterCreateRow="afterCreateRow" :beforeRemoveRow="beforeRemoveRow" :afterRemoveRow="afterRemoveRow" />
+                :afterCreateRow="afterCreateRow" :beforeRemoveRow="beforeRemoveRow" :afterRemoveRow="afterRemoveRow" currentRowClassName="current-row" />
             <el-dialog :model-value="!!mediaProps?.id" title="预览" @close="mediaProps = null">
                 <h2 class="mb-4">{{ mediaProps?.text_foreign }}</h2>
                 <TheMedia v-if="mediaProps" ref="mediaRef" :sentence="mediaProps" />
@@ -89,7 +89,7 @@
 </template>
 <script setup>
 const { params: { id } } = useRoute()
-const { data: book } = useFetch('/api/book/' + id)
+const { data: book } = await useFetch('/api/book/' + id)
 const { data: lessons, refresh: refreshLessons } = useFetch(`/api/book/${id}/lessons`)
 const skills = computed(() => {
     return book?.value?.skills?.split(',')
@@ -112,7 +112,7 @@ const sentences = computed(() => {
     if (data?.length > 0) {
         return data
     }
-    return [{ book_id: book?.value?.id }]
+    return [{ book_id: id }]
 })
 const myHotRef = ref(null)
 function getHot() {
@@ -337,7 +337,7 @@ async function resetPosition(start = 0) {
 }
 </script>
 <style scoped lang="postcss">
-#focus-td {
+:deep(.current-row) {
     @apply bg-primary-content;
 }
 </style>
