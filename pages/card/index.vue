@@ -26,40 +26,24 @@
         </label>
         <button type="button" class="btn btn-error" @click="batchDelete">删除全部</button>
         <p>总数： {{ data?.total }}</p>
-    </form>
-    <div v-if="data?.total > 0" class="overflow-x-auto">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Skill</th>
-                    <th>due_time</th>
-                    <th>text_foreign</th>
-                    <th>text_local</th>
-                    <th>update_time</th>
-                    <th>cloze</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="card in data.data">
-                    <td>{{ card.id }}</td>
-                    <td>{{ card.skill }}</td>
-                    <td>{{ card.due_time }}</td>
-                    <td>{{ card.text_foreign }}</td>
-                    <td>{{ card.text_local }}</td>
-                    <td>{{ card.update_time }}</td>
-                    <td>{{ card.cloze }}</td>
-                    <td>
-                        <button class="btn btn-info btn-xs" @click="reviewRow(card.id)">预览</button>
-                        <button class="btn btn-error btn-xs" @click="deleteRow(card.id)">删除</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
         <ThePagination @update:modelValue="pageChange" :total="data?.total" :limit="formData.limit" />
-    </div>
+    </form>
+    
+    <el-table class="mt-4" :data="data.data" :border="true">
+        <el-table-column prop="id" label="id" />
+        <el-table-column prop="skill" label="skill" />
+        <el-table-column prop="due_time" label="due_time" />
+        <el-table-column prop="text_foreign" label="text_foreign" />
+        <el-table-column prop="text_local" label="text_local" />
+        <el-table-column prop="update_time" label="update_time" />
+        <el-table-column prop="cloze" label="cloze" />
+        <el-table-column fixed="right" label="Operations" width="120">
+            <template #default="scope">
+                <el-button link type="primary" size="small" @click="reviewRow(scope.row.id)">预览</el-button>
+                <el-button link type="danger" size="small" @click="deleteRow(scope.row.id)">删除</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
 
     <dialog id="preview_dialog" class="modal" @close="onPreviewClose">
         <form method="dialog" class="modal-box" @submit.prevent="">
