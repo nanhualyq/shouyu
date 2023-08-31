@@ -28,7 +28,6 @@ export default defineEventHandler(async event => {
 
     // 分钟级别的到期卡
     const minuteCardWhere = [
-        ...where,
         'datetime(due_time) <= datetime()',
         'skilled = 0'
     ]
@@ -54,10 +53,8 @@ export default defineEventHandler(async event => {
 
     // 优先返回分钟级别的卡片
     if (minuteCard?.$?.total) {
-        return {
-            ...minuteCard,
-            $: dayCard?.$
-        }
+        minuteCard.$.total += dayCard?.$?.total || 0
+        return minuteCard
     } else {
         return dayCard
     }
