@@ -1,7 +1,12 @@
 <template>
-    <div v-if="!current?.card?.id" class="text-center mt-4">
-        <h2>没有内容了</h2>
-        <NuxtLink class="btn btn-primary btn-wide mt-2" to="/">返回</NuxtLink>
+    <div v-if="!current?.card?.id" class="hero h-full bg-base-200">
+        <div class="hero-content text-center">
+            <div class="max-w-md">
+                <h1 class="text-5xl font-bold">没有内容了</h1>
+                <p class="py-6">也许已经刷完，也许时间没到</p>
+                <NuxtLink class="btn btn-primary" to="/">返回</NuxtLink>
+            </div>
+        </div>
     </div>
     <div v-else class="h-full flex flex-col">
         <!-- front -->
