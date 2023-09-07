@@ -22,7 +22,7 @@
                 </div>
             </div>
             <!-- Page content here -->
-            <div class="flex-1" :class="{'p-3': shouldPadding}">
+            <div class="flex-1" :class="{ 'p-3': shouldPadding }">
                 <slot />
             </div>
         </div>
@@ -37,10 +37,10 @@
 </template>
 <script setup>
 const shouldPadding = computed(() => {
-    const {name} = useRoute()
-    return name !== 'card-play'
+    const { name } = useRoute()
+    return !['card-play', 'index'].includes(name)
 })
 onBeforeUpdate(() => {
     document.getElementById('my-drawer-3').checked = false
-} )
+})
 </script>

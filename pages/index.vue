@@ -1,13 +1,28 @@
 <template>
-    <div class="text-center" v-if="!books?.length">
+    <!-- <div class="text-center" v-if="!books?.length">
         没有内容，请先
         <NuxtLink to="/book" class="btn btn-primary">添加材料</NuxtLink>
+    </div> -->
+    <div class="hero min-h-full" v-if="!books?.length" style="background-image: url(/images/empty-bookcase.jpeg);">
+        <div class="hero-overlay bg-opacity-60"></div>
+        <div class="hero-content text-center text-neutral-content">
+            <div class="max-w-md">
+                <h1 class="mb-5 text-5xl font-bold">没有内容</h1>
+                <p class="mb-5">
+                    第一次使用授渔？请先添加材料。
+                    <br>
+                    已经添加了材料？别忘了生成卡片
+                </p>
+                <NuxtLink to="/book" class="btn btn-primary btn-wide">添加材料</NuxtLink>
+            </div>
+        </div>
     </div>
     <div v-else class="flex flex-col gap-2">
         <div class="flex gap-2 flex-col md:flex-row">
             <NuxtLink class="btn btn-primary flex-1" :to="reviewUrl">复习到期卡片</NuxtLink>
             <div class="relative">
-                <el-date-picker ref="dateRef" v-model="aheadDate" @change="reviewFuture" type="date" value-format="YYYY-MM-DD" size="large" :disabled-date="setDateValia" />
+                <el-date-picker ref="dateRef" v-model="aheadDate" @change="reviewFuture" type="date"
+                    value-format="YYYY-MM-DD" size="large" :disabled-date="setDateValia" />
                 <button class="btn absolute top-0 left-0 right-0 bottom-0 w-full" @click="openDate">提前复习</button>
             </div>
         </div>
