@@ -2,13 +2,13 @@
     <div v-if="!current?.card?.id" class="hero h-full bg-base-200">
         <div class="hero-content text-center">
             <div class="max-w-md">
-                <h1 class="text-5xl font-bold">没有内容了</h1>
+                <h1 class="text-4xl font-bold">没有内容了</h1>
                 <p class="py-6">也许已经刷完，也许时间没到</p>
-                <NuxtLink class="btn btn-primary" to="/">返回</NuxtLink>
+                <NuxtLink class="btn btn-primary btn-wide" to="/">返回</NuxtLink>
             </div>
         </div>
     </div>
-    <div v-else class="h-full flex flex-col">
+    <div v-else class="h-full flex flex-col" :key="current?.card?.id">
         <!-- front -->
         <CardFront ref="frontRef" class="flex-1 p-2" :current="current" :book="book" />
 
@@ -97,8 +97,12 @@ watch(error, val => {
 })
 const book = ref()
 watch(current, () => {
-    if (book?.value?.id !== current.value?.sentence?.book_id) {
-        useFetch('/api/book/' + current.value?.sentence?.book_id)
+    const bookId = current.value?.sentence?.book_id
+    if (!bookId) {
+        return
+    }
+    if (book?.value?.id !== bookId) {
+        useFetch('/api/book/' + bookId)
             .then(res => book.value = res?.data?.value)
     }
 }, {

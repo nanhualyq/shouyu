@@ -1,13 +1,13 @@
 <template>
     <div>
-        <CardContext class="other-sentence" :key="current?.card?.id"
+        <CardContext class="other-sentence"
             :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position - 1 }"
             label="查看上一句" :field="frontField" />
 
         <p class="current-sentence">
-            <div v-if="isSkill('read', 'listen')">
+            <span v-if="isSkill('read', 'listen')">
                 <TheMedia ref="mediaRef" :sentence="current?.sentence" />
-            </div>
+            </span>
             <span v-if="!isSkill('listen')" class="inline-flex items-center gap-1">
                 <el-icon :size="20" color="rgb(75, 107, 251)">
                     <el-icon-Microphone v-if="isSkill('speak')" />
@@ -17,7 +17,7 @@
             </span>
         </p>
 
-        <CardContext class="other-sentence" :key="current?.card?.id"
+        <CardContext class="other-sentence"
             :query="{ book_id: book?.id, lesson: current.sentence.lesson, position: current.sentence.position + 1 }"
             label="查看下一句" :field="frontField" />
     </div>

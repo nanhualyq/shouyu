@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-4">
-        <div v-if="isSkill('speak', 'write') && !isCloze">
+        <div v-if="showMedia">
             <TheMedia ref="mediaRef" :sentence="current?.sentence" />
         </div>
         <span id="back-text" v-if="!isSkill('speak')" class="text-primary" v-html="backTextHtml">
@@ -26,6 +26,12 @@ const props = defineProps({
 })
 const mediaRef = ref(null)
 const current = toRef(props, 'current')
+const showMedia = computed(() => {
+    if (isCloze.value && !props.isFlip) {
+        return false
+    }
+    return isSkill('speak', 'write')
+})
 const backTextHtml = computed(() => {
     let text = current?.value?.sentence?.[isSkill('read') ? 'text_local' : 'text_foreign']
     const cloze = current?.value?.card?.cloze
