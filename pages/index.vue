@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div v-else class="flex flex-col gap-2">
+    <div v-else class="flex flex-col gap-2 p-3">
         <div class="flex gap-2 flex-col md:flex-row">
             <NuxtLink class="btn btn-primary flex-1" :to="reviewUrl">复习到期卡片</NuxtLink>
             <div class="relative">
