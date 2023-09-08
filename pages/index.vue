@@ -1,8 +1,4 @@
 <template>
-    <!-- <div class="text-center" v-if="!books?.length">
-        没有内容，请先
-        <NuxtLink to="/book" class="btn btn-primary">添加材料</NuxtLink>
-    </div> -->
     <div class="hero min-h-full" v-if="!books?.length" style="background-image: url(/images/empty-bookcase.jpeg);">
         <div class="hero-overlay bg-opacity-60"></div>
         <div class="hero-content text-center text-neutral-content">
@@ -49,11 +45,10 @@
                 <figure><img :src="book.cover" :alt="book.name" style="max-width: 10rem" /></figure>
                 <div class="card-body">
                     <h2 class="card-title">{{ book.name }}</h2>
-                    <p :class="{ 'text-gray-400': book.new_total === 0 }">
-                        剩余新卡：{{ book.new_total }}</p>
+                    <p>复习中：{{ book.old_total }}</p>
                     <div class="card-actions justify-end">
-                        <NuxtLink v-show="book.new_total" class="btn btn-secondary" :to="`/book/${book.id}/plan`">
-                            学习新卡</NuxtLink>
+                        <NuxtLink v-show="book.new_total" class="btn btn-outline" :to="`/book/${book.id}/plan`">
+                            学习新卡({{ book.new_total }})</NuxtLink>
                     </div>
                 </div>
             </div>
