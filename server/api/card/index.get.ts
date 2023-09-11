@@ -3,9 +3,12 @@ export default defineEventHandler(async event => {
     if (!query.limit) {
         query.limit = 20
     }
+    if (!query.orderby) {
+        query.orderby = 'id'
+    }
     const whereArr = []
     for (const key of Object.keys(query)) {
-        if (['limit', 'offset'].includes(key)) {
+        if (['limit', 'offset', 'orderby'].includes(key)) {
             continue
         }
         if (query[key]) {
@@ -24,6 +27,7 @@ export default defineEventHandler(async event => {
     }
     const data = await db.prepare(`SELECT *, card.id as id FROM card
     LEFT JOIN sentence ON (card.sentence_id = sentence.id) ${where}
+    ORDER BY ${query.orderby}
     LIMIT @limit
     OFFSET @offset`)
         .all(query)
