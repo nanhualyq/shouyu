@@ -28,14 +28,15 @@
         <p>总数： {{ data?.total }}</p>
         <ThePagination @update:modelValue="pageChange" :total="data?.total" :limit="formData.limit" />
     </form>
-    
-    <el-table class="mt-4" :data="data.data" :border="true">
-        <el-table-column prop="id" label="id" />
+
+    <el-table class="mt-4" :data="data.data" :border="true" @sort-change="sortChange"
+        :default-sort="{ prop: 'update_time', order: 'descending' }">
+        <el-table-column prop="id" label="id" sortable="custom" />
         <el-table-column prop="skill" label="skill" />
-        <el-table-column prop="due_time" label="due_time" />
+        <el-table-column prop="due_time" label="due_time" sortable="custom" />
         <el-table-column prop="text_foreign" label="text_foreign" />
         <el-table-column prop="text_local" label="text_local" />
-        <el-table-column prop="update_time" label="update_time" />
+        <el-table-column prop="update_time" label="update_time" sortable="custom" />
         <el-table-column prop="cloze" label="cloze" />
         <el-table-column fixed="right" label="Operations" width="120">
             <template #default="scope">
@@ -65,7 +66,8 @@ const formData = ref({
     due_time: '',
     update_time: '',
     limit: 20,
-    offset: 0
+    offset: 0,
+    orderby: 'update_time desc'
 })
 function pageChange(params) {
     formData.value.limit = params.limit
@@ -123,5 +125,13 @@ function reviewRow(id) {
 }
 function onPreviewClose() {
     cardQuery.value = {}
+}
+function sortChange({ column, prop, order }) {
+    console.log(order);
+    if (order) {
+        formData.value.orderby = `${prop} ${order.replace('ending', '')}`
+    } else {
+        formData.value.orderby = ''
+    }
 }
 </script>
