@@ -45,8 +45,8 @@
                 <figure><img :src="book.cover" :alt="book.name" style="max-width: 10rem" /></figure>
                 <div class="card-body">
                     <h2 class="card-title">{{ book.name }}</h2>
-                    <p class="text-neutral-500">复习中：{{ book.old_total }}</p>
-                    <div class="card-actions justify-end">
+                    <p class="text-neutral-500 text-xs">复习中：{{ book.old_total }}</p>
+                    <div class="card-actions">
                         <NuxtLink v-show="book.new_total" class="btn btn-outline" :to="`/book/${book.id}/plan`">
                             学习新卡({{ book.new_total }})</NuxtLink>
                     </div>
