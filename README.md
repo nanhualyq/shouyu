@@ -54,6 +54,7 @@ npm run dev
 
 访问 `http://localhost:3000`
 
+<!-- 
 ---
 ## 创作背景
 过去几年我都在用 `Anki` 学新概念英语和赖世雄美语，为了练习听力和口语，需要将每一句对白的音频用 `Audacity` 剪辑出来，才能在 `Anki` 卡片上播放。
@@ -67,9 +68,6 @@ npm run dev
 
 一开始本不打算开源，觉得这么粗糙的东西很丢人，但最近看到的一些文章给了我极大的启发，让我想通了一个道理：”迭代才是最重要的，不用在乎起点“，所以就不怕被笑话了，何况真有可能帮到一两个人，也算是做出一点微小贡献回馈社会了。
 
-## FAQ
-- 如何在手机、平板上使用？[Wiki/多设备共用](https://github.com/nanhualyq/shouyu/wiki/%E5%A4%9A%E8%AE%BE%E5%A4%87%E5%85%B1%E7%94%A8)
-
 ---
 ## 咨询
 Email: `nanhualyq@gmail.com`
@@ -77,6 +75,7 @@ Email: `nanhualyq@gmail.com`
 <summary>微信号：shouxiaoyu2023</summary>
 <img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256467999-89fe3722-ee40-4898-aaaa-f16574ac4a9d.png"/>
 </details>
+-->
 
 <!-- ---
 ## 捐赠
@@ -93,3 +92,7 @@ Email: `nanhualyq@gmail.com`
 微信支付：
 
 <img width="256" src="https://github-production-user-asset-6210df.s3.amazonaws.com/6212850/256462827-27030ec3-edae-447f-87ac-6590b685f644.jpg"/> -->
+
+
+## FAQ
+- 如何在手机、平板上使用？[Wiki/多设备共用](https://github.com/nanhualyq/shouyu/wiki/%E5%A4%9A%E8%AE%BE%E5%A4%87%E5%85%B1%E7%94%A8)
